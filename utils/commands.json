@@ -1,0 +1,21 @@
+{ "commands":
+        [
+          {
+            "type":"music",
+            "input":["play music", "could you play music", "play something", "play a song", "could you play a song"],
+            "output":["What's the name/url of the song? Ping me in your message so I know you are talking to me.", "Of course! Ping me with the name/url.",
+                      "Sure. In your next message, ping me with the name/url of the song."]
+          },
+          {
+            "type":"weather",
+            "input": ["how is the weather", "will it rain", "it is hot today", "it is cold outside", "should i bring a jacket", "what is the weather",
+                      "what is the temperature outside"],
+            "output": ["Here is an overview of the weather in San Franciso. Specify another city in your message if you want to see that city's forecast."]
+          },
+          {
+            "type": "radio",
+            "input": ["turn on the radio", "recommend a playlist", "play a mixtape"],
+            "output": ["Ping me with the genre!", "Let genre are you feeling", "What type of music do you want to play?"]
+          }
+        ]
+}
