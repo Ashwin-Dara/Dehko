@@ -36,7 +36,9 @@ def main():
     reshape_to_dataframe({"commands": inputs, "type": command_types})
     tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words = 1000)
     tokenizer.fit_on_texts(command_data['commands'])
-    # training_data_x = tf.ker
+    training_seq = tokenizer.texts_to_sequences(command_data['commands'])
+    input_training_data = tf.keras.preprocessing.sequence.pad_sequences(training_seq, dtype='int32')
+
 
 
 
