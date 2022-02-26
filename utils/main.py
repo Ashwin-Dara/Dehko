@@ -5,7 +5,10 @@
 
 import re
 import json
+
+import keras
 import nltk
+import sklearn
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -38,15 +41,26 @@ def main():
     tokenizer.fit_on_texts(command_data['commands'])
     training_seq = tokenizer.texts_to_sequences(command_data['commands'])
     input_training_data = tf.keras.preprocessing.sequence.pad_sequences(training_seq, dtype='int32')
+    le = sklearn.preprocessing.LabelEncoder()
+    output_training_data = le.fit_transform(command_data['commands'])
 
+    i = keras.Input(shape=(input_training_data.shape[1],))
+    x = keras.layers.Embedding(len(tokenizer.word_index)+1, 10)(i)
+    x = keras.layers.LSTM(10, return_sequences=True)(x)
+    x = keras.layers.Flatten()(x)
+    x = keras.layers.Dense(le.classes_.shape[0], activation="softmax")(x)
+    model = keras.Model(i, x)
+    model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
+    train = model.fit(input_training_data, output_training_data, epochs=300)
 
+    scanned_text_input = input("ENTER YOUR COMMAND: ")
+    # NEED TO PROCESS THE INPUT
+
+    print(scanned_text_input)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
-    print(inputs)
-    print(command_types)
-    print(command_data)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
