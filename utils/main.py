@@ -55,6 +55,15 @@ def main():
 
     scanned_text_input = input("ENTER YOUR COMMAND: ")
     # NEED TO PROCESS THE INPUT
+    '''
+    TODO
+        - Get the input processing.
+        - Refactor the code into a proper OOP format
+        - Add the YT API as a sub-repository
+        - Research on Discord API
+        - Data pipeline (similar to previous one but this time, iterate over the past values and merge to prevent 
+        discontigouity)
+    '''
 
     print(scanned_text_input)
 
