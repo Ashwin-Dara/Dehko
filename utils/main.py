@@ -5,9 +5,9 @@
 
 import re
 import json
-
 import keras
 import nltk
+import string
 import sklearn
 import numpy as np
 import pandas as pd
@@ -19,11 +19,34 @@ inputs = []
 outputs = {}
 command_data = 0
 
+
 def reshape_to_dataframe(mapping):
     global command_data
     command_data = pd.DataFrame(mapping)
     command_data = command_data.reset_index()
     command_data['commands'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
+
+
+def process_input_chars(text):
+    text = text.lower()
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    return text
+
+
+def vectorize_string(text, tokenizer, shape):
+    text_list = [text]
+    text = tokenizer.texts_to_sequences(text_list)
+    text = np.array(text).reshape(-1)
+    text = tf.keras.preprocessing.sequence.pad_sequences(text_list, shape)
+    return text
+
+
+def get_response(text, mm, encoder, tokenizer, shape):
+    text = process_input_chars(text)
+    text = vectorize_string(text, tokenizer, shape)
+    response = mm.predict(text)
+    opt = response.argmax()
+    return encoder.inverse_transform([opt])[0]
 
 
 def main():
@@ -37,7 +60,7 @@ def main():
             command_types.append(i['type'])
 
     reshape_to_dataframe({"commands": inputs, "type": command_types})
-    tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words = 1000)
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=1000)
     tokenizer.fit_on_texts(command_data['commands'])
     training_seq = tokenizer.texts_to_sequences(command_data['commands'])
     input_training_data = tf.keras.preprocessing.sequence.pad_sequences(training_seq, dtype='int32')
@@ -45,7 +68,7 @@ def main():
     output_training_data = le.fit_transform(command_data['commands'])
 
     i = keras.Input(shape=(input_training_data.shape[1],))
-    x = keras.layers.Embedding(len(tokenizer.word_index)+1, 10)(i)
+    x = keras.layers.Embedding(len(tokenizer.word_index) + 1, 10)(i)
     x = keras.layers.LSTM(10, return_sequences=True)(x)
     x = keras.layers.Flatten()(x)
     x = keras.layers.Dense(le.classes_.shape[0], activation="softmax")(x)
@@ -54,7 +77,8 @@ def main():
     train = model.fit(input_training_data, output_training_data, epochs=300)
 
     scanned_text_input = input("ENTER YOUR COMMAND: ")
-    # NEED TO PROCESS THE INPUT
+    print(scanned_text_input)
+    print(get_response(scanned_text_input, model, le, tokenizer, input_training_data.shape[1]))
     '''
     TODO
         - Get the input processing.
@@ -62,10 +86,8 @@ def main():
         - Add the YT API as a sub-repository
         - Research on Discord API
         - Data pipeline (similar to previous one but this time, iterate over the past values and merge to prevent 
-        discontigouity)
+        discontinuity)
     '''
-
-    print(scanned_text_input)
 
 
 # Press the green button in the gutter to run the script.
