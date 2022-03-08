@@ -18,7 +18,16 @@ import matplotlib.pyplot as plt
 command_types = []
 inputs = []
 outputs = {}
+inputs_to_commands = {}
 command_data = 0
+
+def init_inputs_to_comm_map():
+    global inputs_to_commands
+    temp = {}
+    with open('commands.json', 'r') as f:
+        temp = json.load(f)
+        for d in temp['commands']:
+            pass
 
 
 def reshape_to_dataframe(mapping):
@@ -102,16 +111,12 @@ def vectorize_input(text, model, le, tokenizer, shape):
     text = tokenizer.texts_to_sequences(text_list)
     text = np.array(text).reshape(-1)
     text = keras_preprocessing.sequence.pad_sequences([text], shape)
-    output = model.predict(text)
-    output = output.argmax()
-    index = le.inverse_transform([output])[0]
-    return index
+    return optimize_output(text, model, le)
 
-def optimize_output():
-    pass
-
-
-
+def optimize_output(text, model, le):
+    prediction = model.predict(text)
+    prediction = prediction.argmax()
+    return le.inverse_transform([prediction])[0]
 
 
 # Press the green button in the gutter to run the script.
