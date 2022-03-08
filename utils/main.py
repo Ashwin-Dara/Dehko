@@ -6,6 +6,7 @@
 import re
 import json
 import keras
+import keras_preprocessing.sequence
 import nltk
 import string
 import sklearn
@@ -36,13 +37,16 @@ def process_input_chars(text):
 def vectorize_string(text, tokenizer, shape):
     text_list = [text]
     text = tokenizer.texts_to_sequences(text_list)
+    print("LINE 40", text)
     text = np.array(text).reshape(-1)
+    print("LINE 41", text)
     text = tf.keras.preprocessing.sequence.pad_sequences(text_list, shape)
     return text
 
 
 def get_response(text, mm, encoder, tokenizer, shape):
     text = process_input_chars(text)
+    print(text)
     text = vectorize_string(text, tokenizer, shape)
     response = mm.predict(text)
     opt = response.argmax()
@@ -77,8 +81,8 @@ def main():
     train = model.fit(input_training_data, output_training_data, epochs=300)
 
     scanned_text_input = input("ENTER YOUR COMMAND: ")
-    print(scanned_text_input)
-    print(get_response(scanned_text_input, model, le, tokenizer, input_training_data.shape[1]))
+    print(vectorize_input(scanned_text_input, model, le, tokenizer, input_training_data.shape[1]))
+    print("LINE 85")
     '''
     TODO
         - Get the input processing.
@@ -88,6 +92,26 @@ def main():
         - Data pipeline (similar to previous one but this time, iterate over the past values and merge to prevent 
         discontinuity)
     '''
+def process_text(text):
+    text = text.lower()
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    return text
+
+def vectorize_input(text, model, le, tokenizer, shape):
+    text_list = [text]
+    text = tokenizer.texts_to_sequences(text_list)
+    text = np.array(text).reshape(-1)
+    text = keras_preprocessing.sequence.pad_sequences([text], shape)
+    output = model.predict(text)
+    output = output.argmax()
+    index = le.inverse_transform([output])[0]
+    return index
+
+def optimize_output():
+    pass
+
+
+
 
 
 # Press the green button in the gutter to run the script.
