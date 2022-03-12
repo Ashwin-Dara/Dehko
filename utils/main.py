@@ -6,7 +6,6 @@
 import re
 import json
 import keras
-import keras_preprocessing.sequence
 import nltk
 import string
 import sklearn
@@ -14,20 +13,28 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import keras_preprocessing.sequence
 
+class NLP_Model:
+    def __init__(self):
+        pass
+
+commands = {}
 command_types = []
 inputs = []
 outputs = {}
 inputs_to_commands = {}
 command_data = 0
 
+
 def init_inputs_to_comm_map():
     global inputs_to_commands
     temp = {}
     with open('commands.json', 'r') as f:
         temp = json.load(f)
-        for d in temp['commands']:
-            pass
+        for objs in temp['commands']:
+            for comm in objs["input"]:
+                inputs_to_commands[comm] = objs["type"]
 
 
 def reshape_to_dataframe(mapping):
@@ -66,6 +73,8 @@ def main():
     with open('commands.json') as command_variants:
         training_data = json.load(command_variants)
 
+    init_inputs_to_comm_map()
+
     for i in training_data['commands']:
         outputs[i['type']] = i['output']
         for j in i['input']:
@@ -90,21 +99,23 @@ def main():
     train = model.fit(input_training_data, output_training_data, epochs=300)
 
     scanned_text_input = input("ENTER YOUR COMMAND: ")
-    print(vectorize_input(scanned_text_input, model, le, tokenizer, input_training_data.shape[1]))
-    print("LINE 85")
+    predicted_input = vectorize_input(scanned_text_input, model, le, tokenizer, input_training_data.shape[1])
+    print("The detected command is: ", inputs_to_commands[predicted_input])
     '''
     TODO
-        - Get the input processing.
         - Refactor the code into a proper OOP format
         - Add the YT API as a sub-repository
         - Research on Discord API
         - Data pipeline (similar to previous one but this time, iterate over the past values and merge to prevent 
-        discontinuity)
+        discontinuity) (maybe have it in SQL)
     '''
+
+
 def process_text(text):
     text = text.lower()
     text = text.translate(str.maketrans('', '', string.punctuation))
     return text
+
 
 def vectorize_input(text, model, le, tokenizer, shape):
     text_list = [text]
@@ -112,6 +123,7 @@ def vectorize_input(text, model, le, tokenizer, shape):
     text = np.array(text).reshape(-1)
     text = keras_preprocessing.sequence.pad_sequences([text], shape)
     return optimize_output(text, model, le)
+
 
 def optimize_output(text, model, le):
     prediction = model.predict(text)

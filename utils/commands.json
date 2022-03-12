@@ -9,13 +9,18 @@
           {
             "type":"weather",
             "input": ["how is the weather", "will it rain", "it is hot today", "it is cold outside", "should i bring a jacket", "what is the weather",
-                      "what is the temperature outside"],
+                      "what is the temperature outside", "what is the temp"],
             "output": ["Here is an overview of the weather in San Franciso. Specify another city in your message if you want to see that city's forecast."]
           },
           {
             "type": "radio",
             "input": ["turn on the radio", "recommend a playlist", "play a mixtape"],
             "output": ["Ping me with the genre!", "Let genre are you feeling", "What type of music do you want to play?"]
+          },
+          {
+            "type": "reminder",
+            "input": ["remind me something", "remind me to message", "remind me to"],
+            "output": ["Will ping you when it's time!"]
           }
         ]
 }
