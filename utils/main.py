@@ -15,16 +15,12 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import keras_preprocessing.sequence
 
-class NLP_Model:
-    def __init__(self):
-        pass
 
-commands = {}
-command_types = []
-inputs = []
-outputs = {}
-inputs_to_commands = {}
-command_data = 0
+command_types = [] # Represents lists of all possible current commands. There are duplicates within this list
+inputs = [] # List of all possible inputs
+outputs = {} # List of dictionaries. In the form {command_type:[input1, input2, ...]}
+inputs_to_commands = {} # Mapping of the inputs to commands
+command_data = 0 # Dataframe representing the commands and their type
 
 
 def init_inputs_to_comm_map():
@@ -101,6 +97,23 @@ def main():
     scanned_text_input = input("ENTER YOUR COMMAND: ")
     predicted_input = vectorize_input(scanned_text_input, model, le, tokenizer, input_training_data.shape[1])
     print("The detected command is: ", inputs_to_commands[predicted_input])
+
+    '''
+    class Commands: 
+        Instance Variables:
+        - self.data_path -- this is the path to the JSON file
+        - self.inputs_to_comm -- this is a mapping of a particular classified input into a command
+        - self.all_commands -- list of all of the possible commands. Currently, there are duplicates within this array
+        - self.all_inputs - list representing all possible inputs described from the JSON training file
+        - self.training_data - JSON version of data
+        - self.data_df - dataframe of training data
+        
+        Methods: 
+        - def configure_dataframe(self):
+        - def process_JSON
+        - def get_command(input) # Will return the command associated with the given input. 
+    '''
+
     '''
     TODO
         - Refactor the code into a proper OOP format
