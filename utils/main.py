@@ -15,6 +15,63 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import keras_preprocessing.sequence
 
+class NLPModel:
+    def __init__(self, dff=None, col_name=None):
+        self.model = None
+        self.le = None
+        self.tokenizer = None
+        self.sequences = None
+        self.input_training_data = None
+        self.output_training_data = None
+        self.epochs = 350
+
+        if dff is not None or col_name is not None:
+            self.process_dataframe_data(dff, col_name)
+            self.init_model()
+
+    def process_dataframe_data(self, df, col):
+        self.tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=1000)
+        # command_data['commands'] - this represents a data frame that containing the command within one
+        # column ('commands') and the associated "type" (could be music, weather, radio, etc.)
+
+        self.tokenizer.fit_on_texts(df[col])
+
+        self.sequences = self.tokenizer.texts_to_sequences(df[col])
+
+        self.input_training_data = tf.keras.preprocessing.sequence.pad_sequences(self.sequences, dtype='int32')
+        self.le = sklearn.preprocessing.LabelEncoder()
+        self.output_training_data = self.le.fit_transform(df[col])
+
+    def init_model(self):
+        i = keras.Input(shape=(self.input_training_data.shape[1],))
+        x = keras.layers.Embedding(len(self.tokenizer.word_index) + 1, 10)(i)
+        x = keras.layers.LSTM(10, return_sequences=True)(x)
+        x = keras.layers.Flatten()(x)
+        x = keras.layers.Dense(self.le.classes_.shape[0], activation="softmax")(x)
+        self.model = keras.Model(i, x)
+        self.model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
+        train = self.model.fit(self.input_training_data, self.output_training_data, epochs=self.epochs)
+
+    def process_text(text):
+        text = text.lower()
+        text = text.translate(str.maketrans('', '', string.punctuation))
+        return text
+
+    def vectorize_text(self, text):
+        text_list = [text]
+        text = self.tokenizer.texts_to_sequences(text_list)
+        text = np.array(text).reshape(-1)
+        text = keras_preprocessing.sequence.pad_sequences([text], self.input_training_data.shape[1])
+        return self.optimize_output(text)
+
+    def optimize_output(self, text):
+        pred = self.model.predict(text)
+        pred = pred.argmax()
+        return self.le.inverse_transform([pred])[0]
+
+    def classify_command(self, text):
+        return self.vectorize_text(NLPModel.process_text(text))
+
 
 command_types = [] # Represents lists of all possible current commands. There are duplicates within this list
 inputs = [] # List of all possible inputs
@@ -78,6 +135,8 @@ def main():
             command_types.append(i['type'])
 
     reshape_to_dataframe({"commands": inputs, "type": command_types})
+
+    '''
     tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=1000)
     tokenizer.fit_on_texts(command_data['commands'])
     training_seq = tokenizer.texts_to_sequences(command_data['commands'])
@@ -92,11 +151,13 @@ def main():
     x = keras.layers.Dense(le.classes_.shape[0], activation="softmax")(x)
     model = keras.Model(i, x)
     model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
-    train = model.fit(input_training_data, output_training_data, epochs=300)
+    train = model.fit(input_training_data, output_training_data, epochs=350)
 
     scanned_text_input = input("ENTER YOUR COMMAND: ")
-    predicted_input = vectorize_input(scanned_text_input, model, le, tokenizer, input_training_data.shape[1])
-    print("The detected command is: ", inputs_to_commands[predicted_input])
+    predicted_input = vectorize_input(process_text(scanned_text_input), model, le, tokenizer, input_training_data.shape[1])
+    print("The detected command is: ", inputs_to_commands[predicted_input]) 
+    '''
+
 
     '''
     class Commands: 
