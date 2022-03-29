@@ -45,8 +45,16 @@ def print_music_info(name):
     print("LINE 44 was printed:  " + name)
 
 # We will create a queue for all of the requested processes. Moreover, we will maintain a load limit.
-# The implementatio
+# The implementation will be a Linked List essentially. There will be a pointer to the head and the tail.
+# This is for extremely fast insertions and deletions. They will be O(1).
 class ProcessQueue:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def add(self, obj):
+        if self.head is None and self.tail is None:
+
 
 
 class Procedure:
