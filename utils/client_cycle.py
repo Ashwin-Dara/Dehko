@@ -47,6 +47,7 @@ def print_music_info(name):
 # We will create a queue for all of the requested processes. Moreover, we will maintain a load limit.
 # The implementation will be a Linked List essentially. There will be a pointer to the head and the tail.
 # This is for extremely fast insertions and deletions. They will be O(1).
+# Link for Process Handling: drive link with diagram pending......
 class ProcessQueue:
     def __init__(self):
         self.head = None
@@ -101,7 +102,6 @@ class Procedure:
 
 client = discord.Client()
 bot = commands.Bot
-
 
 # Reference: https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
 
