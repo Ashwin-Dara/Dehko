@@ -51,16 +51,27 @@ class ProcessQueue:
     def __init__(self):
         self.head = None
         self.tail = None
+        self.size = 0
 
     def add(self, obj):
         if self.head is None and self.tail is None:
+            self.head = obj
+            self.tail = obj
+            self.size += 1
+        else:
+            self.tail.next = obj
+            self.tail = obj
+            self.size += 1
 
+    def get_length(self):
+        return self.size
 
 
 class Procedure:
     type_to_function = {}
 
     def __init__(self, procedure_type, argument=None, fun=None):
+        self.next = None
         self.type_to_function = {}
         self.argument = argument
         self.procedure_type = procedure_type
