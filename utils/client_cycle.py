@@ -1,10 +1,10 @@
 import discord
+from inspect import signature
 from discord.ext import commands
 import random
 import asyncio
 import os
 import re
-
 
 # Useful References
 # https://discordpy.readthedocs.io/en/stable/quickstart.html
@@ -40,8 +40,49 @@ import re
 
 """
 
+# Created for testing purposes. Want to make sure that the Procedure.complete() function works as intended.
+def print_music_info(name):
+    print("LINE 44 was printed:  " + name)
+
+# We will create a queue for all of the requested processes. Moreover, we will maintain a load limit.
+# The implementatio
+class ProcessQueue:
+
+
+class Procedure:
+    type_to_function = {}
+
+    def __init__(self, procedure_type, argument=None, fun=None):
+        self.type_to_function = {}
+        self.argument = argument
+        self.procedure_type = procedure_type
+        self.fun = fun
+        self.sig = None
+        self.init_process_to_function(fun)
+
+    def init_process_to_function(self, fun):
+        Procedure.type_to_function[self.procedure_type] = self.fun
+        self.sig = signature(fun)
+
+    def set_argument(self, arg):
+        self.argument = arg
+
+    def set_procedure_type(self, proc):
+        self.procedure_type = proc
+
+    def complete(self):
+        assert self.procedure_type in Procedure.type_to_function.keys(), \
+            "No defined function to complete for the specified procedure"
+
+        assert len(self.sig.parameters) == 1 and self.argument is not None, \
+            "Please configure the argument"
+
+        Procedure.type_to_function[self.procedure_type](self.argument)
+
+
 client = discord.Client()
 bot = commands.Bot
+
 
 # Reference: https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
 
@@ -80,14 +121,10 @@ class MsgClient(discord.Client):
             pass
 
 
-
-
 async def classify_input(n_model, c_model, text):
     pass
+
 
 @client.event
 async def on_message(message):
     pass
-
-
-
