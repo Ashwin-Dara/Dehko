@@ -40,6 +40,28 @@ import re
 
 """
 
+"""
+  1 import logging
+  2 import threading
+  3 import time
+  4 
+  5 # Reference used: https://realpython.com/intro-to-python-threading/
+  6 
+  7 def functionWeWillThread(name):
+  8     print("This is thread number " + name)
+  9     time.sleep(0.5) # We need some sort of delay. Sleep is in seconds
+ 10 
+ 11 x = threading.Thread(target = functionWeWillThread, arg=("First Thread", ))
+ 12 x.start() 
+ 
+ Need to learn how threading works for the process Queue.
+ 
+ Essentially, once we get a certain amount of requests, start another thread and do it concurrently.
+ Then when it falls below half the threshold, stop the thread and go back to single thread.
+ 
+ Maybe it might be unnecessary to make multiple threads? It could just be running in the background.
+"""
+
 # Created for testing purposes. Want to make sure that the Procedure.complete() function works as intended.
 def print_music_info(name):
     print("LINE 44 was printed:  " + name)
