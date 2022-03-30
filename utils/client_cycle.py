@@ -64,14 +64,38 @@ class ProcessQueue:
             self.tail = obj
             self.size += 1
 
-    def get_length(self):
+    def pop(self):
+        if self.size == 0:
+            return None
+        if self.size == 1:
+            first = self.head
+            self.head = None
+            self.tail = None
+            self.size -= 1
+            first.complete()
+            return first
+        else:
+            first = self.head
+            self.head = self.head.next
+            first.next = None
+            self.size -= 1
+            first.complete()
+            return first
+
+    def size(self):
         return self.size
 
+    def peek(self):
+        if self.head is None:
+            return "ProcessQueue is empty"
+        else:
+            return "Head Process in Queue:  " +\
+                   self.head.to_string()
 
 class Procedure:
     type_to_function = {}
 
-    def __init__(self, procedure_type, argument=None, fun=None):
+    def __init__(self, procedure_type, fun, argument=None):
         self.next = None
         self.type_to_function = {}
         self.argument = argument
@@ -94,10 +118,10 @@ class Procedure:
         assert self.procedure_type in Procedure.type_to_function.keys(), \
             "No defined function to complete for the specified procedure"
 
-        assert len(self.sig.parameters) == 1 and self.argument is not None, \
-            "Please configure the argument"
-
         Procedure.type_to_function[self.procedure_type](self.argument)
+
+    def to_string(self):
+        return f'Process Type: {self.procedure_type}. Num of Args Required: {len(self.sig.parameters)}'
 
 
 client = discord.Client()
