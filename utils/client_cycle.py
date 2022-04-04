@@ -66,6 +66,71 @@ import re
 def print_music_info(name):
     print("LINE 44 was printed:  " + name)
 
+"""
+import asyncio
+
+async def counter_loop(x, n):
+    for i in range(1, n + 1):
+        print(f"Counter {x}: {i}")
+        await asyncio.sleep(0.5)
+    return f"Finished {x} in {n}"
+
+async def main():
+    slow_task = asyncio.create_task(counter_loop("Slow", 4))
+    fast_coro = counter_loop("Fast", 2)
+
+    print("Awaiting Fast")
+    fast_val = await fast_coro
+    print("Finished Fast")
+
+    print("Awaiting Slow")
+    slow_val = await slow_task
+    print("Finished Slow")
+
+    print(f"{fast_val}, {slow_val}")
+
+asyncio.run(main())
+"""
+
+class QueueLoad:
+
+    min_load = 0.1
+    max_load = 3
+
+    def __init__(self):
+        self.num_bins = 5
+        self.num_entries = 0
+        self.queues = []
+        for i in range(0, self.num_bins):
+            self.queues = ProcessQueue()
+
+    def get_load(self):
+        return self.num_entries / self.num_bins
+
+    def complete(self):
+        pass
+
+    def expand_queues(self):
+        i = 0
+        temp = self.num_bins
+        while i < temp:
+            self.queues.add(ProcessQueue())
+            self.num_bins += 1
+            i += 1
+
+    def queue_process(self, process):
+        pr_id = process.get_process_id()
+
+        if self.get_load() > QueueLoad.max_load:
+            self.expand_queues()
+
+        assigned_queue = pr_id % self.num_bins
+        self.queues[assigned_queue].add(process)
+        self.num_entries += 1
+
+
+
+
 # We will create a queue for all of the requested processes. Moreover, we will maintain a load limit.
 # The implementation will be a Linked List essentially. There will be a pointer to the head and the tail.
 # This is for extremely fast insertions and deletions. They will be O(1).
@@ -117,14 +182,17 @@ class ProcessQueue:
 class Procedure:
     type_to_function = {}
 
-    def __init__(self, procedure_type, fun, argument=None):
-        self.next = None
+    def __init__(self, procedure_type, fun, uid, argument=None):
+        self.uid = uid
         self.type_to_function = {}
         self.argument = argument
         self.procedure_type = procedure_type
         self.fun = fun
         self.sig = None
-        self.init_process_to_function(fun)
+        self.next = None
+
+        if procedure_type not in Procedure.type_to_function.keys():
+            self.init_process_to_function(fun)
 
     def init_process_to_function(self, fun):
         Procedure.type_to_function[self.procedure_type] = self.fun
@@ -135,6 +203,10 @@ class Procedure:
 
     def set_procedure_type(self, proc):
         self.procedure_type = proc
+
+    def get_process_id(self):
+        r_id = self.procedure_type + " " + self.argument + " " + self.uid
+        return hash(r_id)
 
     def complete(self):
         assert self.procedure_type in Procedure.type_to_function.keys(), \
