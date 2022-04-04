@@ -107,9 +107,14 @@ class QueueLoad:
     def get_load(self):
         return self.num_entries / self.num_bins
 
+    # Need to figure out the best way to actually execute the currently assigned
+    # functions that are associated with the process object.
     def complete(self):
         pass
 
+    # If the load factor hits some critical mass, we will expand the number of
+    # possible concurrent queues for program efficiency. The load factor will be
+    # determined through experimentation.
     def expand_queues(self):
         i = 0
         temp = self.num_bins
