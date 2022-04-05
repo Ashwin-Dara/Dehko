@@ -18,8 +18,29 @@ The "heading" ping indicates the message needs to be parsed. Finally, the argume
 
 ### Process Construction
 
+After breaking the message into its three components and removing the head and the tail component, the "body" is classified and converted into a process object. Here is an overview of the `Process` class.
+
+```{python}
+Process
+
+    @Members
+    
+    @Functions 
+```
 
 ### Process Assignment and Load Balancing  
+
+To efficiently handle all requests, employed is a model analogous to load balancing. Here's an overview of how requests are handled and efficiently processed:
+1. Client messages/commands are converted to Processes.
+   1. Processes have a consistent associated process ID.
+   2. The ID is based on the (1) sender's user id (2) the type of request the user is making.
+
+
+2. Processes are assigned to various `ProcessQueues`. Requests follow a FIFO mechanism.
+   1. The system begins with 5 `ProcessQueues` in parallel.
+   2. All queues are multi-tasking with completetion as the end whole.
+   3. If the load factor is below a certain amount, the number of concurrent `ProcessQueues` will double.
+
 
 ### Efficient Execution
 
