@@ -11,11 +11,13 @@ class MessageParser:
     ping_pattern = r'^\s*@dehko'
     arg_pattern = r'~.*'
 
-    def __init__(self, message):
-        self.contents = message
+    def __init__(self, message, nn_model, comm_model):
         self.argument = None
+        self.content_internal = None
 
-        self.content_internal = re.sub(self.contents, MessageParser.ping_pattern, "")
+        self.contents = message
+        self.comm = comm_model
+        self.nn = nn_model
 
         # Stopping the rest of the constructor from going if this was a ping to begin with
         if not self.is_command_ping():
@@ -26,13 +28,17 @@ class MessageParser:
         if r:
             self.argument = r.group(0).replace("~", "")
 
-        self.type =
+        # Stores the internal message content (body) which we pass into the model for classification.
+        self.content_internal = re.sub(self.contents, MessageParser.ping_pattern, "")
+        self.content_internal = re.sub(self.content_internal, MessageParser.arg_pattern, "")
+
+        self.type = nn_model.classify_command(self.content_internal, comm_model)
 
     def get_argument(self):
         return self.argument
 
     def get_command_type(self):
-        return self.argument
+        return self.type
 
     def is_command_ping(self):
         """
