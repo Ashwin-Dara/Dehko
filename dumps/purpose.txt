@@ -1,0 +1,8 @@
+- all of the dumps go here for the util
+- use pickle to serialize the following things
+
+	1. Trained Model
+	2. Commands Model (so you don't re-open the JSON file every single time) 
+	3. Dictionary containing the "names" to the associated functions (part of the process queue dictionary thingy) 
+	
+	

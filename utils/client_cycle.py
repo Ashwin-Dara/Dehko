@@ -11,7 +11,11 @@ import re
 # Previous REPL Project on Data Pipelines
 # Should not be too difficult. Making the API calls and using the proper data structure will be the hardest part.
 
-# Overview of Message Flow
+# Overview of Message
+
+# How to run multi-processed queues in python: https://docs.python.org/3/library/queue.html
+# THIS ARTICLE IS MORE USEFUL THAN THE OTHER ARICLES: https://medium.datadriveninvestor.com/the-most-simple-explanation-of-threads-and-queues-in-python-cbc206025dd1
+
 """
 ---------- RECEIVING
 

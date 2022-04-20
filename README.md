@@ -55,7 +55,7 @@ https://github.com/tensorflow/tensorflow
 
 
 
-## Utils - Design Features 
+### Utils - Design Features 
 - Will be able to play music from YouTube
 - Example commands. `please play music ~link` `play music ~link` `could you please tune a jam ~link`
 - It will be inconveniant in terms of user design if they cant play music without the link 
@@ -64,14 +64,24 @@ FEATURE: play music based on the song. Will need to play the top result from the
 FEATURE: curate playlists from YouTube API. Alongside a recommendation system, this would be very good. 
 FEATURE: Will send nice dashboard of the current song that is playing (maybe try to retrieve more information from spotify? Need to figure out how to send a nicely formatting image that retrieves the thumbnail and everything) 
 
-## Weather 
+#### Weather 
 - Example commands `what is the temperature` 
 - Output: should give a nice visual dashboard depending on the area that you are in. It will give day's forecast by default. 
 
-## Radio 
+#### Radio 
 - curate the playlist 
 
-## Reminders
+#### Reminders
 - make this an exact command. Should not be something left to NLP/Classification.
 `~remind 1hr "tell me to check this"`
 `~remind 1:30hr "Check the forecast"`
+
+
+## Serialization and Caching
+
+Since the program is mainly event driven and to prevent resources from being lost in the background once we are done with a particular task, serialization is carefully employed to store core information. In particular, after the classification model is trained and optimized, we serialize the model for convenient accessibility once the program ends. Moreover, important mappings that were recovered through the formatting is recovered as well. No time is ever wasted doing time-consuming tasks that have already been once done before! We use the "pickle" python library in order to serialize. 
+
+**Readings**  
+- https://machinelearningmastery.com/a-gentle-introduction-to-serialization-for-python/
+- https://www.deanishe.net/alfred-workflow/guide/serialization.html
+- https://hazelcast.com/blog/a-hitchhikers-guide-to-caching-patterns/

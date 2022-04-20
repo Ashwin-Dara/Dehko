@@ -41,7 +41,7 @@ class NLPModel:
 
         self.input_training_data = tf.keras.preprocessing.sequence.pad_sequences(self.sequences, dtype='int32')
         self.le = sklearn.preprocessing.LabelEncoder()
-        self.output_training_data = self.le.fit_transform(df[col])
+        self.output_training_data = self.le.fit_transform   (df[col])
 
     def init_model(self):
         i = keras.Input(shape=(self.input_training_data.shape[1],))
