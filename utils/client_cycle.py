@@ -1,13 +1,12 @@
-import discord
-from inspect import signature
+import discord # imports the discord module for discord/recreational integration
+from inspect import signature # Not sure exactly what this doing (FIXME) (FIGURE OUT WHAT THIS IS DOING)
 from discord.ext import commands
-from MessageParser import MessageParser
-from main import nn_classifier
 
-import random
-import asyncio
-import os
-import re
+from main import nn_classifier # Importing the NLP classification model from the main class
+from MessageParser import MessageParser # Importing the MessageParser class
+from ProcessQueue import * # Importing all functions from the file 'ProcessQueue.py'
+
+# Here are some 
 
 # Useful References
 # https://discordpy.readthedocs.io/en/stable/quickstart.html
@@ -16,8 +15,6 @@ import re
 
 # Overview of Message
 
-# How to run multi-processed queues in python: https://docs.python.org/3/library/queue.html
-# THIS ARTICLE IS MORE USEFUL THAN THE OTHER ARICLES: https://medium.datadriveninvestor.com/the-most-simple-explanation-of-threads-and-queues-in-python-cbc206025dd1
 
 """
 ---------- RECEIVING
@@ -47,57 +44,9 @@ import re
 
 """
 
-"""
-  1 import logging
-  2 import threading
-  3 import time
-  4 
-  5 # Reference used: https://realpython.com/intro-to-python-threading/
-  6 
-  7 def functionWeWillThread(name):
-  8     print("This is thread number " + name)
-  9     time.sleep(0.5) # We need some sort of delay. Sleep is in seconds
- 10 
- 11 x = threading.Thread(target = functionWeWillThread, arg=("First Thread", ))
- 12 x.start() 
- 
- Need to learn how threading works for the process Queue.
- 
- Essentially, once we get a certain amount of requests, start another thread and do it concurrently.
- Then when it falls below half the threshold, stop the thread and go back to single thread.
- 
- Maybe it might be unnecessary to make multiple threads? It could just be running in the background.
-"""
-
 # Created for testing purposes. Want to make sure that the Procedure.complete() function works as intended.
 def print_music_info(name):
     print("LINE 44 was printed:  " + name)
-
-"""
-import asyncio
-
-async def counter_loop(x, n):
-    for i in range(1, n + 1):
-        print(f"Counter {x}: {i}")
-        await asyncio.sleep(0.5)
-    return f"Finished {x} in {n}"
-
-async def main():
-    slow_task = asyncio.create_task(counter_loop("Slow", 4))
-    fast_coro = counter_loop("Fast", 2)
-
-    print("Awaiting Fast")
-    fast_val = await fast_coro
-    print("Finished Fast")
-
-    print("Awaiting Slow")
-    slow_val = await slow_task
-    print("Finished Slow")
-
-    print(f"{fast_val}, {slow_val}")
-
-asyncio.run(main())
-"""
 
 class QueueLoad:
 
@@ -229,13 +178,13 @@ class Procedure:
     def to_string(self):
         return f'Process Type: {self.procedure_type}. Num of Args Required: {len(self.sig.parameters)}'
 
-
 client = discord.Client()
 bot = commands.Bot
 
 # Reference: https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
 
 class MsgClient(discord.Client):
+
     def __init__(self):
         super()
         self.nlp_model = nn_classifier
@@ -244,28 +193,22 @@ class MsgClient(discord.Client):
         print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
         print("##########")
 
-    def classify_input(self, text):
-        if self.nlp_model is None or self.command_model is None:
-            assert False, "Please configure the appropriate obj. models for MsgClient Class."
-
-    @staticmethod
-    def sub_pattern(pattern, txt):
-        return re.sub(pattern, '', txt)
-
     async def on_message(self, message):
-        # Checking if the author is the bot. If so, we don't want to respond to ourselves.
+        # Checking if the author is the bot.
+        # If so, we don't want to respond to ourselves, so we just return.
         if message.author.id == self.user.id:
             return
 
+        # Taking the contents of the message and creating an object of the "MessageParser"
+        # It will parse through the message that we just send and tell us key information about
+        # the arguments, type, and etc.
+
         parsed_msg = MessageParser(message.content, self.nlp_model, self.command_model)
         if parsed_msg.is_command_ping():
-            pass
 
-
-async def classify_input(n_model, c_model, text):
-    pass
-
-
-@client.event
-async def on_message(message):
-    pass
+            # Create a procedure of the "type" that we parsed the message
+            # Extract the relevant arguments and pass them into the procedure
+            # Push the procedure object onto the "Process Queue."
+            procedure = Procedure(parsed_msg.get_command_type(), parsed_msg.get_argument())
+            add_procedure_request(procedure)
+            empty_procedure_queue()
