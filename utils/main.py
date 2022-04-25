@@ -8,16 +8,22 @@ import json
 import keras
 import nltk
 import string
+import pickle
 import sklearn
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from os.path import exists
 import keras_preprocessing.sequence
 
+
 class NLPModel:
-    def __init__(self, dff=None, col_name='commands'):
-        self.comm_df = dff
+    def __init__(self, comm_model=None, col_name='commands'):
+        self.comm_model = comm_model
+        if self.comm_model is None:
+            return
+        self.comm_df = self.comm_model.get_dataframe()
         self.model = None
         self.le = None
         self.tokenizer = None
@@ -26,8 +32,8 @@ class NLPModel:
         self.output_training_data = None
         self.epochs = 350
 
-        if dff is not None or col_name is not None:
-            self.process_dataframe_data(dff, col_name)
+        if self.comm_df is not None or col_name is not None:
+            self.process_dataframe_data(self.comm_df, col_name)
             self.init_model()
 
     def process_dataframe_data(self, df, col):
@@ -41,7 +47,7 @@ class NLPModel:
 
         self.input_training_data = tf.keras.preprocessing.sequence.pad_sequences(self.sequences, dtype='int32')
         self.le = sklearn.preprocessing.LabelEncoder()
-        self.output_training_data = self.le.fit_transform   (df[col])
+        self.output_training_data = self.le.fit_transform(df[col])
 
     def init_model(self):
         i = keras.Input(shape=(self.input_training_data.shape[1],))
@@ -70,10 +76,10 @@ class NLPModel:
         pred = pred.argmax()
         return self.le.inverse_transform([pred])[0]
 
-    def classify_command(self, text, cmodel):
+    def classify_command(self, text):
         assert self.comm_df is not None, \
             "Please enter a valid data frame based on the command model class."
-        return cmodel.input_to_command(self.vectorize_text(NLPModel.process_text(text)))
+        return self.comm_model.input_to_command(self.vectorize_text(NLPModel.process_text(text)))
 
 
 class CommandModel:
@@ -132,11 +138,11 @@ class CommandModel:
         return self.df
 
 
-command_types = [] # Represents lists of all possible current commands. There are duplicates within this list
-inputs = [] # List of all possible inputs
-outputs = {} # List of dictionaries. In the form {command_type:[input1, input2, ...]}
-inputs_to_commands = {} # Mapping of the inputs to commands
-command_data = 0 # Dataframe representing the commands and their type
+command_types = []  # Represents lists of all possible current commands. There are duplicates within this list
+inputs = []  # List of all possible inputs
+outputs = {}  # List of dictionaries. In the form {command_type:[input1, input2, ...]}
+inputs_to_commands = {}  # Mapping of the inputs to commands
+command_data = 0  # Dataframe representing the commands and their type
 
 
 def init_inputs_to_comm_map():
@@ -181,67 +187,8 @@ def get_response(text, mm, encoder, tokenizer, shape):
     return encoder.inverse_transform([opt])[0]
 
 
-def main():
-    with open('commands.json') as command_variants:
-        training_data = json.load(command_variants)
-
-    init_inputs_to_comm_map()
-
-    for i in training_data['commands']:
-        outputs[i['type']] = i['output']
-        for j in i['input']:
-            inputs.append(j)
-            command_types.append(i['type'])
-
-    reshape_to_dataframe({"commands": inputs, "type": command_types})
-
-    '''
-    tokenizer = tf.keras.preprocessing.text.Tokenizer(num_words=1000)
-    tokenizer.fit_on_texts(command_data['commands'])
-    training_seq = tokenizer.texts_to_sequences(command_data['commands'])
-    input_training_data = tf.keras.preprocessing.sequence.pad_sequences(training_seq, dtype='int32')
-    le = sklearn.preprocessing.LabelEncoder()
-    output_training_data = le.fit_transform(command_data['commands'])
-
-    i = keras.Input(shape=(input_training_data.shape[1],))
-    x = keras.layers.Embedding(len(tokenizer.word_index) + 1, 10)(i)
-    x = keras.layers.LSTM(10, return_sequences=True)(x)
-    x = keras.layers.Flatten()(x)
-    x = keras.layers.Dense(le.classes_.shape[0], activation="softmax")(x)
-    model = keras.Model(i, x)
-    model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
-    train = model.fit(input_training_data, output_training_data, epochs=350)
-
-    scanned_text_input = input("ENTER YOUR COMMAND: ")
-    predicted_input = vectorize_input(process_text(scanned_text_input), model, le, tokenizer, input_training_data.shape[1])
-    print("The detected command is: ", inputs_to_commands[predicted_input]) 
-    '''
 
 
-    '''
-    class Commands: 
-        Instance Variables:
-        - self.data_path -- this is the path to the JSON file
-        - self.inputs_to_comm -- this is a mapping of a particular classified input into a command
-        - self.all_commands -- list of all of the possible commands. Currently, there are duplicates within this array
-        - self.all_inputs - list representing all possible inputs described from the JSON training file
-        - self.training_data - JSON version of data
-        - self.data_df - dataframe of training data
-        
-        Methods: 
-        - def configure_dataframe(self):
-        - def process_JSON
-        - def get_command(input) # Will return the command associated with the given input. 
-    '''
-
-    '''
-    TODO
-        - Refactor the code into a proper OOP format
-        - Add the YT API as a sub-repository
-        - Research on Discord API
-        - Data pipeline (similar to previous one but this time, iterate over the past values and merge to prevent 
-        discontinuity) (maybe have it in SQL)
-    '''
 
 
 def process_text(text):
@@ -262,6 +209,28 @@ def optimize_output(text, model, le):
     prediction = model.predict(text)
     prediction = prediction.argmax()
     return le.inverse_transform([prediction])[0]
+
+
+nn_classifier = None
+
+with open("dumps/optimized_model.pickle", 'rb') as infile:
+    nn_classifier = pickle.load(infile)
+    
+def main():
+    with open('commands.json') as command_variants:
+        training_data = json.load(command_variants)
+
+    init_inputs_to_comm_map()
+
+    for i in training_data['commands']:
+        outputs[i['type']] = i['output']
+        for j in i['input']:
+            inputs.append(j)
+            command_types.append(i['type'])
+
+    reshape_to_dataframe({"commands": inputs, "type": command_types})
+    global nn_classifier
+    # nn_classifier = NLPModel(CommandModel("commands.json"))
 
 
 # Press the green button in the gutter to run the script.

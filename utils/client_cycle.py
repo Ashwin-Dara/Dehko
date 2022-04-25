@@ -1,6 +1,9 @@
 import discord
 from inspect import signature
 from discord.ext import commands
+from MessageParser import MessageParser
+from main import nn_classifier
+
 import random
 import asyncio
 import os
@@ -235,16 +238,11 @@ bot = commands.Bot
 class MsgClient(discord.Client):
     def __init__(self):
         super()
-        self.nlp_model = None
-        self.command_model = None
+        self.nlp_model = nn_classifier
 
     async def on_ready(self):
         print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
         print("##########")
-
-    def config_models(self, nlp, comm):
-        self.nlp_model = nlp
-        self.command_model = comm
 
     def classify_input(self, text):
         if self.nlp_model is None or self.command_model is None:
@@ -259,11 +257,8 @@ class MsgClient(discord.Client):
         if message.author.id == self.user.id:
             return
 
-        msg_string = message.content
-        ping_pattern = fr'^\s*{self.user.id}'
-        is_matched = re.match(ping_pattern, msg_string)
-
-        if is_matched:
+        parsed_msg = MessageParser(message.content, self.nlp_model, self.command_model)
+        if parsed_msg.is_command_ping():
             pass
 
 
