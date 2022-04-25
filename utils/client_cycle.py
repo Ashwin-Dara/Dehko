@@ -6,15 +6,13 @@ from main import nn_classifier # Importing the NLP classification model from the
 from MessageParser import MessageParser # Importing the MessageParser class
 from ProcessQueue import * # Importing all functions from the file 'ProcessQueue.py'
 
-# Here are some 
+# Importing the relevant class for creating Procedure instances.
+from ProcedureHandling import Procedure
 
-# Useful References
-# https://discordpy.readthedocs.io/en/stable/quickstart.html
-# Previous REPL Project on Data Pipelines
-# Should not be too difficult. Making the API calls and using the proper data structure will be the hardest part.
-
-# Overview of Message
-
+# Here are some useful references to consider looking at when writing integration for Discord
+# - https://discordpy.readthedocs.io/en/stable/quickstart.html
+# - https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
+# - REPL- previous project on data mining
 
 """
 ---------- RECEIVING
@@ -140,59 +138,26 @@ class ProcessQueue:
             return "Head Process in Queue:  " +\
                    self.head.to_string()
 
-class Procedure:
-    type_to_function = {}
-
-    def __init__(self, procedure_type, fun, uid, argument=None):
-        self.uid = uid
-        self.type_to_function = {}
-        self.argument = argument
-        self.procedure_type = procedure_type
-        self.fun = fun
-        self.sig = None
-        self.next = None
-
-        if procedure_type not in Procedure.type_to_function.keys():
-            self.init_process_to_function(fun)
-
-    def init_process_to_function(self, fun):
-        Procedure.type_to_function[self.procedure_type] = self.fun
-        self.sig = signature(fun)
-
-    def set_argument(self, arg):
-        self.argument = arg
-
-    def set_procedure_type(self, proc):
-        self.procedure_type = proc
-
-    def get_process_id(self):
-        r_id = self.procedure_type + " " + self.argument + " " + self.uid
-        return hash(r_id)
-
-    def complete(self):
-        assert self.procedure_type in Procedure.type_to_function.keys(), \
-            "No defined function to complete for the specified procedure"
-
-        Procedure.type_to_function[self.procedure_type](self.argument)
-
-    def to_string(self):
-        return f'Process Type: {self.procedure_type}. Num of Args Required: {len(self.sig.parameters)}'
 
 client = discord.Client()
 bot = commands.Bot
 
-# Reference: https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
 
 class MsgClient(discord.Client):
 
     def __init__(self):
         super()
+
+        # Setting the NLP model from the dumps folder we serialized the trained model in.
+        # Everytime we re-train the model or add additional things to the model, WE MUST RE-RUN MAIN.
         self.nlp_model = nn_classifier
 
+    # This function will run when the Discord bot is connected to the server and ready to go.
     async def on_ready(self):
         print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
         print("##########")
 
+    # This function runs whenever
     async def on_message(self, message):
         # Checking if the author is the bot.
         # If so, we don't want to respond to ourselves, so we just return.

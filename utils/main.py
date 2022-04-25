@@ -162,55 +162,6 @@ def reshape_to_dataframe(mapping):
     command_data['commands'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
 
 
-def process_input_chars(text):
-    text = text.lower()
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    return text
-
-
-def vectorize_string(text, tokenizer, shape):
-    text_list = [text]
-    text = tokenizer.texts_to_sequences(text_list)
-    print("LINE 40", text)
-    text = np.array(text).reshape(-1)
-    print("LINE 41", text)
-    text = tf.keras.preprocessing.sequence.pad_sequences(text_list, shape)
-    return text
-
-
-def get_response(text, mm, encoder, tokenizer, shape):
-    text = process_input_chars(text)
-    print(text)
-    text = vectorize_string(text, tokenizer, shape)
-    response = mm.predict(text)
-    opt = response.argmax()
-    return encoder.inverse_transform([opt])[0]
-
-
-
-
-
-
-def process_text(text):
-    text = text.lower()
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    return text
-
-
-def vectorize_input(text, model, le, tokenizer, shape):
-    text_list = [text]
-    text = tokenizer.texts_to_sequences(text_list)
-    text = np.array(text).reshape(-1)
-    text = keras_preprocessing.sequence.pad_sequences([text], shape)
-    return optimize_output(text, model, le)
-
-
-def optimize_output(text, model, le):
-    prediction = model.predict(text)
-    prediction = prediction.argmax()
-    return le.inverse_transform([prediction])[0]
-
-
 nn_classifier = None
 
 with open("dumps/optimized_model.pickle", 'rb') as infile:
@@ -230,7 +181,10 @@ def main():
 
     reshape_to_dataframe({"commands": inputs, "type": command_types})
     global nn_classifier
-    # nn_classifier = NLPModel(CommandModel("commands.json"))
+    nn_classifier = NLPModel(CommandModel("commands.json"))
+
+    with open('dumps/optimized_model.pickle', 'wb') as outfile:
+        pickle.dump(nn_classifier, outfile)
 
 
 # Press the green button in the gutter to run the script.
