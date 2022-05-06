@@ -19,12 +19,4 @@ class Procedure:
         command_to_func_mapping[self.procedure_name](self.procedure_args)
 
     def to_string(self):
-        return f'Process Name: {self.procedure_name}. Arguments: {self.procedure_args}'
-
-    def get_metadate(self):
-        pass
-        # This function should return useful meta data about the Procedure instance we create.
-        # This should be returning a STRING of the following information:
-        #   - TYPE OF PROCEDURE (e.g, "music", "weather", "radio", etc...)
-        #   - ARGUMENT OF THE PROCEDURE (might be a song name if the procedure is a music or radio)
-        #   - TIME IT WAS CREATED (format should be TIME--DD--MM)
+        return f'Procedure Name: `{self.procedure_name}`. Arguments: `{self.procedure_args}`'

@@ -1,13 +1,11 @@
 import discord # imports the discord module for discord/recreational integration
 from inspect import signature # Not sure exactly what this doing (FIXME) (FIGURE OUT WHAT THIS IS DOING)
 from discord.ext import commands
-
-from main import nn_classifier # Importing the NLP classification model from the main class
 from MessageParser import MessageParser # Importing the MessageParser class
 from ProcessQueue import * # Importing all functions from the file 'ProcessQueue.py'
 
 # Importing the relevant class for creating Procedure instances.
-from ProcedureHandling import Procedure
+from Procedure import Procedure
 
 # Here are some useful references to consider looking at when writing integration for Discord
 # - https://discordpy.readthedocs.io/en/stable/quickstart.html
@@ -143,22 +141,20 @@ client = discord.Client()
 bot = commands.Bot
 
 
-class MsgClient(discord.Client):
-
-    def __init__(self):
-        super()
-
+class MsgClient:
+    def __init__(self, nn_model):
         # Setting the NLP model from the dumps folder we serialized the trained model in.
         # Everytime we re-train the model or add additional things to the model, WE MUST RE-RUN MAIN.
-        self.nlp_model = nn_classifier
+        self.nlp_model = nn_model
+        self.command_model = self.nlp_model.get_command_model()
 
-    # This function will run when the Discord bot is connected to the server and ready to go.
-    async def on_ready(self):
-        print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
-        print("##########")
+    # # This function will run when the Discord bot is connected to the server and ready to go.
+    # async def on_ready(self):
+    #     print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
+    #     print("##########")
 
     # This function runs whenever
-    async def on_message(self, message):
+    def on_message(self, message):
         # Checking if the author is the bot.
         # If so, we don't want to respond to ourselves, so we just return.
         if message.author.id == self.user.id:
@@ -177,3 +173,13 @@ class MsgClient(discord.Client):
             procedure = Procedure(parsed_msg.get_command_type(), parsed_msg.get_argument())
             add_procedure_request(procedure)
             empty_procedure_queue()
+
+    def process_message(self, text):
+        parsed_msg = MessageParser(text, self.nlp_model, self.command_model)
+        procedure = Procedure(parsed_msg.get_command_type(), parsed_msg.get_argument())
+        print(parsed_msg.print_data())
+        print(procedure.to_string())
+        add_procedure_request(procedure)
+        empty_procedure_queue()
+
+

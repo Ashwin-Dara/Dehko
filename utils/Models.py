@@ -8,7 +8,7 @@ import json
 import keras
 import nltk
 import string
-import pickle
+import dill
 import sklearn
 import numpy as np
 import pandas as pd
@@ -59,7 +59,7 @@ class NLPModel:
         self.model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
         train = self.model.fit(self.input_training_data, self.output_training_data, epochs=self.epochs)
 
-    def process_text(text):
+    def process_text(self, text):
         text = text.lower()
         text = text.translate(str.maketrans('', '', string.punctuation))
         return text
@@ -79,7 +79,12 @@ class NLPModel:
     def classify_command(self, text):
         assert self.comm_df is not None, \
             "Please enter a valid data frame based on the command model class."
-        return self.comm_model.input_to_command(self.vectorize_text(NLPModel.process_text(text)))
+        processed = self.process_text(text)
+        vectorized = self.vectorize_text(processed)
+        return self.comm_model.input_to_command(vectorized)
+
+    def get_command_model(self):
+        return self.comm_model
 
 
 class CommandModel:
@@ -162,12 +167,9 @@ def reshape_to_dataframe(mapping):
     command_data['commands'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
 
 
-nn_classifier = None
+if not exists('dumps/optimized_model'):
+    nn_classifier = None
 
-with open("dumps/optimized_model.pickle", 'rb') as infile:
-    nn_classifier = pickle.load(infile)
-    
-def main():
     with open('commands.json') as command_variants:
         training_data = json.load(command_variants)
 
@@ -180,15 +182,9 @@ def main():
             command_types.append(i['type'])
 
     reshape_to_dataframe({"commands": inputs, "type": command_types})
-    global nn_classifier
     nn_classifier = NLPModel(CommandModel("commands.json"))
-
-    with open('dumps/optimized_model.pickle', 'wb') as outfile:
-        pickle.dump(nn_classifier, outfile)
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
+    with open('dumps/optimized_model', 'wb') as outfile:
+        dill.dump(nn_classifier, outfile)
+        print("DUMPED NN MODEL")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

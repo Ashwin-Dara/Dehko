@@ -8,6 +8,7 @@ import queue
 from threading import Thread
 
 NUMBER_OF_THREADS = 2
+RUNNING_QUEUE = False
 
 process_queue = queue.Queue(maxsize=0)
 
@@ -24,8 +25,12 @@ def complete_procedures(q):
 
 
 def empty_procedure_queue():
-    for i in range(NUMBER_OF_THREADS):
-        w = Thread(target=complete_procedures, args=(process_queue,))
-        w.setDaemon(True)
-        w.start()
-    process_queue.join()
+    global RUNNING_QUEUE
+    if not RUNNING_QUEUE:
+        RUNNING_QUEUE = True
+        for i in range(NUMBER_OF_THREADS):
+            w = Thread(target=complete_procedures, args=(process_queue,))
+            w.setDaemon(True)
+            w.start()
+        process_queue.join()
+        RUNNING_QUEUE = False
