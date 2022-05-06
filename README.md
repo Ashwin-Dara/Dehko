@@ -27,7 +27,7 @@ foo@bar:~$ dehko train
 
 Cleaning and Reoptimizing Dehko!
 
-[PROGRESS] #########----------------
+[PROGRESS] +++++++----------------
 Status: 40%. Estimated Time: 300 ms.
 ```
 d `~$ dehko retrain` so that the program is able to retrain the Neural Net model with the updated data for classification and dumps the model for quick performance. 
