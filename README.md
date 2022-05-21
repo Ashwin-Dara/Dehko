@@ -1,53 +1,74 @@
-## Dehcko
-Dehko is an NLP smart assistant tool built for your terminal to easily define custom automation macros without worrying about the particular syntax. Type in a description of the task you wish to run, and Dehko will automatically classify natural language to the corresponding intended command. Dehko allows you to eliminate the baggage that comes with the strict precision currently required for many CLI tools. Commands and intents are highly configurable, and can be done by modifying a JSON configuration file. More details are described in **Customization**. 
+# Dehko
 
-#### Insert Video Here
+Dehko is a multi-OS NLP smart assistant tool built to easily automate non-developer and developer tasks. Dehko allows you to eliminate the baggage of inflexible syntax/semantics that are involved with the other usual forms of automation (scripts, macros, niche applications, settings, etc). Dehko allows you to define custom sequences by defining a command and associated keyphrases that correspond to that command. Moreover, there’s no need to worry about remembering these keyphrases. Dehko uses NLP to parse, evaluate, and classify your input, ensuring that the process of converting natural, human language into understandable instructions is highly accurate. 
+Dehko is highly customizable yet simple to use. All modifications are handled by simply editing a single JSON configuration file, and constant streams of open source analytic tools are available to users to view. Here’s a video that better illustrates what Dehko does and how it works. 
+
 
 ## Installation
-Dehko was containirzied using Docker for robust and interactibility across different client machines. That being said, downloading Dehko will require the installation of all dependencies. If you do not wish to do this manually, simply choose the appropriate installation executable depending on your operating system. 
 
-Instead, if you wish to develop later on 
+First, clone this repository within the directory of your choice. For example, if I had a folder named “Dehko_Installation” within my computer, I would first “cd” into that directory then run the command `foo@bar/Dehko_Installation:~$ git clone github.com/Ashwin-Dara/Dehko`. 
 
-## Customization
-After downloading Dehko, there should be a modifiable JSON file with the exact name "configurations.JSON." Roughly, the format of the file should look something like the following: 
+After cloning the repository, install the following requirements: 
 
-```python
+Docker 
+Necessary python libraries. Do this by running the command `python3 pip install -requirements.txt` within “Dehko/utils”
+
+To ensure that Dehko was installed correctly, type in the command `docker run dehko --version` to check whether or not Dehko installed correctly. Currently, Dehko is on version 1.02. All that’s remaining before you get Dekho up and running for your usage is to modify the JSON configuration file and then type in the command `dehko train`. More details about modifying Dekho to fit your needs are located in the customization section.
+
+
+## Customization 
+To customize Dehko – such as defining a custom command and associated phrases – there are two steps to it. 
+
+The first step would be to modify the primary JSON configuration file. This is located under the the directory `Dehko/utils` would be to modify a JSON file “config.json.” The purpose of this step is to inform Dehko what new commands are being added and the associated phrases for that command. Currently, Dehko comes with 3 default commands. Copy the layout of one of these and modify the fields appropriately. 
+
+The second step is to actually define the sequence for Dehko to execute once the command is matched. Dehko is primarily built on Python, which allows for powerful scripting capabilities. To define a new script associated with the entry just added within the JSON file, it’s recommended to create a new Python file with the code that should be executed for that command. Then within the file, “commands to mapping” dictionary, add the function that you define within the dictionary.
+
+Here’s a complete example of adding a new command named “Web Workflow” that will open Google Chrome when Dehko classifies the command as such. Let’s begin by modifying the JSON file. Here is what the new entry would look like:
+
+```json
 {
-command:"type", 
-phrases: ['phrase 1', 'p2', 'phrase-3'],
-script: "scripts/command1"
+ {
+  command: "Web-Workflow", 
+  phrases: ["open web workflow", "open tabs", "web workflow", "workflow"]
+ }
 }
 ```
 
-Modify the JSON file to create the new command type, associated phrases with that command type, and the path of the script that you wish to run whenever that command is called. For the sake of organization, we recommend putting all of your custom scripts within a new directory named `scripts`.
+Then, we need to actually write the code to be executed whenever the “Web Workflow” command is classified. First let’s create a new Python file with the name “web-workflow-action.py.” Then within that file, let’s add the following content within that file: 
 
-After doing all of this, run the following commands within your terminal. 
+```python
+import subprocess
+
+def web-workflow(workflow_number):
+
+	# If the workflow number is one, then we will Open firefox
+	if workflow_number == 1: 
+		subprocess.call(['C:\Program Files\Mozilla Firefox\\firefox.exe'])
+		return 
+
+	# If it is anything else, we will execute Google Chrome
+	subprocess.call(['C:\Program Files\Google Chrome\\chrome.exe'])	
+```
+
+After making any modifications to Dehko, it needs to be retrained. To re-optimize Dehko and run the command just created, we would use the following code: 
 ```console
+
 foo@bar:~$ dehko train
 
-Cleaning and Reoptimizing Dehko!
+Dehko is Cleaning and Re-Optimizing!
+Progress: [30%] [##########---------------------------]
 
-PROGRESS: [40%] [##########......................................]
-Estimated Time Remaining: 300 ms.
+Dehko is now ready!
+
+foo@bar:~$ dehko open workflow ~1
+> Task Complete.
 ```
-d `~$ dehko retrain` so that the program is able to retrain the Neural Net model with the updated data for classification and dumps the model for quick performance. 
- 
-
-### Directory Structure
-
-Here is a overview of the structure of this repository.
 
 
-### Licensing 
+## Directory Structure 
+```mermaid
+flowchart LR
+id1(Dehko) ---> utils & app
+```
 
-Dehko is released under the MIT license. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
----------
-
-#### References 
-- https://github.com/openai/gym
-- https://github.com/commaai/openpilot
-- https://github.com/tensorflow/tensorflow
-- https://machinelearningmastery.com/a-gentle-introduction-to-serialization-for-python/
-- https://www.deanishe.net/alfred-workflow/guide/serialization.html
-- https://hazelcast.com/blog/a-hitchhikers-guide-to-caching-patterns/
