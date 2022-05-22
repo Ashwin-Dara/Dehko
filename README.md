@@ -1,19 +1,23 @@
 # Dehko
 
-Dehko is a multi-OS NLP smart assistant tool built to easily automate non-developer and developer tasks. Dehko allows you to eliminate the baggage of inflexible syntax/semantics that are involved with the other usual forms of automation (scripts, macros, niche applications, settings, etc). Dehko allows you to define custom sequences by defining a command and associated keyphrases that correspond to that command. Moreover, there’s no need to worry about remembering these keyphrases. Dehko uses NLP to parse, evaluate, and classify your input, ensuring that the process of converting natural, human language into understandable instructions is highly accurate. 
+Dehko is a multi-OS NLP smart assistant tool built to easily automate non-developer and developer tasks. Dehko allows you to eliminate the baggage of inflexible syntax/semantics that are involved with the other usual forms of automation (scripts, macros, niche applications, settings, etc). 
+
+Dehko allows you to define custom sequences by defining a command and associated keyphrases that correspond to that command. Moreover, there’s no need to worry about remembering these keyphrases. Dehko uses NLP to parse, evaluate, and classify your input, ensuring that the process of converting natural, human language into understandable instructions is highly accurate. 
+
 Dehko is highly customizable yet simple to use. All modifications are handled by simply editing a single JSON configuration file, and constant streams of open source analytic tools are available to users to view. Here’s a video that better illustrates what Dehko does and how it works. 
 
 
 ## Installation
 
-First, clone this repository within the directory of your choice. For example, if I had a folder named “Dehko_Installation” within my computer, I would first “cd” into that directory then run the command `foo@bar/Dehko_Installation:~$ git clone github.com/Ashwin-Dara/Dehko`. 
+Clone this repository within the directory of your choice. After cloning the repository, install the following either manually or through `requirements.txt` which is located under `Dehko/utils`. 
 
-After cloning the repository, install the following requirements: 
+- Docker 
+- Tensorflow 2.0. `$ pip install tensorflow`
+- Pandas. `$ pip install pandas` 
+- NLTK. `$ pip install ntlk`
+- Matplotlib, Jupyter, Pandas, SciPy, NumPy. `$ python3 -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose`
 
-Docker 
-Necessary python libraries. Do this by running the command `python3 pip install -requirements.txt` within “Dehko/utils”
-
-To ensure that Dehko was installed correctly, type in the command `docker run dehko --version` to check whether or not Dehko installed correctly. Currently, Dehko is on version 1.02. All that’s remaining before you get Dekho up and running for your usage is to modify the JSON configuration file and then type in the command `dehko train`. More details about modifying Dekho to fit your needs are located in the customization section.
+To ensure that Dehko was installed correctly, type the command `docker run dehko --version` to check whether or not Dehko installed correctly. Currently, Dehko is on version 1.02. All that’s remaining before you get Dekho up and running for your usage is to modify the JSON configuration file and then type in the command `dehko train`. More details about modifying Dekho to fit your needs are located in the customization section.
 
 
 ## Customization 
@@ -54,12 +58,12 @@ After making any modifications to Dehko, it needs to be retrained. To re-optimiz
 ```console
 
 foo@bar:~$ dehko train
-
-Dehko is Cleaning and Re-Optimizing!
-Progress: [30%] [##########---------------------------]
-
-Dehko is now ready!
-
+>
+> Dehko is Cleaning and Re-Optimizing!
+> Progress: [30%] [##########---------------------------]
+>
+> Dehko is now ready!
+>
 foo@bar:~$ dehko open workflow ~1
 > Task Complete.
 ```
