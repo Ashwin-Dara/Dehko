@@ -1,6 +1,9 @@
-# Dehko
+# Dehko💡 - The NLP Automation Assistant
 
-![Dependency Status](https://img.shields.io/badge/dependences-updated-brightgreen)
+![Dehko Banner](drafts/readme-logo/Dehko-Banner.png)
+
+
+![Dependencies](https://img.shields.io/badge/Dependencies-Up%20to%20Date.-brightgreen) ![Version](https://img.shields.io/badge/Dehko%20Version-1.02-blue) ![Tests](https://img.shields.io/badge/Tests-65%20passing%2C%203%20failing-red)
 
 Dehko is a multi-OS NLP smart assistant tool built to easily automate non-developer and developer tasks. Dehko allows you to eliminate the baggage of inflexible syntax/semantics that are involved with the other usual forms of automation (scripts, macros, niche applications, settings, etc). 
 
@@ -70,11 +73,6 @@ foo@bar:~$ dehko open workflow ~1
 > Task Complete.
 ```
 
-
-## Directory Structure 
-```mermaid
-flowchart LR
-id1(Dehko) ---> utils & app
-```
-
+## Directory Structure
+[![](https://mermaid.ink/img/pako:eNplUk1Lw0AQ_SvDnhIwFlEvPQiFehBEinqRpocxO0lH94v9OFTxvzuJqaLu6e0w7817s_uuOq9JLdUQMezh9r51IIf1qqrWtH_1dQ1NcyWFi2o7FRYls0nQQOddRnYJNoe89w7QaTB-4G5Xf4vM3MsjV0fs8y8yGgNscaD0n7aJOFg8csN029Xwt-282j758lieabW5gVSem0jBJ84-HmTU6JczU4JIBjO7AbIHH8iN0JJm_Bl9MWueVdsp50KM9jyk05ckERtIlEeFBD0bUex9BE0DT1JdSdlbiWat7CKd_qh-BZml7wm7vAqh2k4IMATDnRjz7r-PdbEh_dr8Qo8lsaI5UjdlnJc5JYsCSIvPyGj4TeDd3a5WJ8pStMhanvp9HNKqvCdLrVoK1NRjMblVrfuQ1hI0ZrrW4wbVskeT6ERhyf7h4Dq1zLHQsWnNKD_Hzl0fn_78xmY)](https://mermaid.live/edit#pako:eNplUk1Lw0AQ_SvDnhIwFlEvPQiFehBEinqRpocxO0lH94v9OFTxvzuJqaLu6e0w7817s_uuOq9JLdUQMezh9r51IIf1qqrWtH_1dQ1NcyWFi2o7FRYls0nQQOddRnYJNoe89w7QaTB-4G5Xf4vM3MsjV0fs8y8yGgNscaD0n7aJOFg8csN029Xwt-282j758lieabW5gVSem0jBJ84-HmTU6JczU4JIBjO7AbIHH8iN0JJm_Bl9MWueVdsp50KM9jyk05ckERtIlEeFBD0bUex9BE0DT1JdSdlbiWat7CKd_qh-BZml7wm7vAqh2k4IMATDnRjz7r-PdbEh_dr8Qo8lsaI5UjdlnJc5JYsCSIvPyGj4TeDd3a5WJ8pStMhanvp9HNKqvCdLrVoK1NRjMblVrfuQ1hI0ZrrW4wbVskeT6ERhyf7h4Dq1zLHQsWnNKD_Hzl0fn_78xmY)
 
