@@ -1,4 +1,4 @@
-# Dehko💡 - The NLP Automation Assistant
+# Dehko💡- The NLP Automation Assistant
 
 ![Dehko Banner](drafts/readme-logo/Dehko-Banner.png)
 
@@ -74,5 +74,20 @@ foo@bar:~$ dehko open workflow ~1
 ```
 
 ## Directory Structure
-[![](https://mermaid.ink/img/pako:eNplUk1Lw0AQ_SvDnhIwFlEvPQiFehBEinqRpocxO0lH94v9OFTxvzuJqaLu6e0w7817s_uuOq9JLdUQMezh9r51IIf1qqrWtH_1dQ1NcyWFi2o7FRYls0nQQOddRnYJNoe89w7QaTB-4G5Xf4vM3MsjV0fs8y8yGgNscaD0n7aJOFg8csN029Xwt-282j758lieabW5gVSem0jBJ84-HmTU6JczU4JIBjO7AbIHH8iN0JJm_Bl9MWueVdsp50KM9jyk05ckERtIlEeFBD0bUex9BE0DT1JdSdlbiWat7CKd_qh-BZml7wm7vAqh2k4IMATDnRjz7r-PdbEh_dr8Qo8lsaI5UjdlnJc5JYsCSIvPyGj4TeDd3a5WJ8pStMhanvp9HNKqvCdLrVoK1NRjMblVrfuQ1hI0ZrrW4wbVskeT6ERhyf7h4Dq1zLHQsWnNKD_Hzl0fn_78xmY)](https://mermaid.live/edit#pako:eNplUk1Lw0AQ_SvDnhIwFlEvPQiFehBEinqRpocxO0lH94v9OFTxvzuJqaLu6e0w7817s_uuOq9JLdUQMezh9r51IIf1qqrWtH_1dQ1NcyWFi2o7FRYls0nQQOddRnYJNoe89w7QaTB-4G5Xf4vM3MsjV0fs8y8yGgNscaD0n7aJOFg8csN029Xwt-282j758lieabW5gVSem0jBJ84-HmTU6JczU4JIBjO7AbIHH8iN0JJm_Bl9MWueVdsp50KM9jyk05ckERtIlEeFBD0bUex9BE0DT1JdSdlbiWat7CKd_qh-BZml7wm7vAqh2k4IMATDnRjz7r-PdbEh_dr8Qo8lsaI5UjdlnJc5JYsCSIvPyGj4TeDd3a5WJ8pStMhanvp9HNKqvCdLrVoK1NRjMblVrfuQ1hI0ZrrW4wbVskeT6ERhyf7h4Dq1zLHQsWnNKD_Hzl0fn_78xmY)
+Here is a overview of the directory structure, highlighting the most important directories and the most relevant files. 
 
+[![](https://mermaid.ink/img/pako:eNo1j89qwzAMh1_F6DAcaGZY2w1y2Cl7gu7oixoriTv_CbZMGaXvPi9tLpJ-0scHusEQDUEHo4vXYcbE4rvXwZo32dP8ExvRtu2nsGYvVWHrciNeajpIZRKO_IxHqZaEk8dHfJcql3OiJTb_qv3m-JCZmG2Y8uslx7Aej9txKWdnhypa-0OUU13UspKHjbR-ylJZjxPlBnbgKXm0pj5x00EIDTyTJw1dHQ2NWBxr0OFe0bIYZPoylmOCbkSXaQdYOJ5-wwAdp0Ib1FucEvondf8Dmo5glQ)](https://mermaid.live/edit#pako:eNo1j89qwzAMh1_F6DAcaGZY2w1y2Cl7gu7oixoriTv_CbZMGaXvPi9tLpJ-0scHusEQDUEHo4vXYcbE4rvXwZo32dP8ExvRtu2nsGYvVWHrciNeajpIZRKO_IxHqZaEk8dHfJcql3OiJTb_qv3m-JCZmG2Y8uslx7Aej9txKWdnhypa-0OUU13UspKHjbR-ylJZjxPlBnbgKXm0pj5x00EIDTyTJw1dHQ2NWBxr0OFe0bIYZPoylmOCbkSXaQdYOJ5-wwAdp0Ib1FucEvondf8Dmo5glQ)
+
+Folders
+- utils - contains all of the logic of Dehko, written in Python. Also contains the dependencies list in requirements.txt.
+- drafts - contains all images used within this project. 
+- pragma - folder containing the react application
+- subrepo - any external utilities for particular functionality 
+
+Files 
+- settings.json - this configuration file is what will be modified in order to customize the functionality of Dehko up to the client needs. This is one of the most important files in terms of ensuring that Dehko functions as intended.
+
+-----
+
+### Resources
+- 
