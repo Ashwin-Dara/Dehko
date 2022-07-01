@@ -1,6 +1,3 @@
-import discord # imports the discord module for discord/recreational integration
-from inspect import signature # Not sure exactly what this doing (FIXME) (FIGURE OUT WHAT THIS IS DOING)
-from discord.ext import commands
 from MessageParser import MessageParser # Importing the MessageParser class
 from ProcessQueue import * # Importing all functions from the file 'ProcessQueue.py'
 
@@ -135,11 +132,6 @@ class ProcessQueue:
         else:
             return "Head Process in Queue:  " +\
                    self.head.to_string()
-
-
-client = discord.Client()
-bot = commands.Bot
-
 
 class MsgClient:
     def __init__(self, nn_model):

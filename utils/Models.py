@@ -1,22 +1,25 @@
-# This is a sample Python script.
+import os
+# Disabling logging warnings from Tensorflow to clean debugging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
+# Libraries for handling parsing of commands and metadata storage
 import re
 import json
+
+# Relevant ML/NLP libraries
 import keras
-import nltk
-import string
-import dill
 import sklearn
+import nltk
+import matplotlib.pyplot as plt
+import tensorflow as tf
 import numpy as np
 import pandas as pd
-import tensorflow as tf
-import matplotlib.pyplot as plt
-from os.path import exists
 import keras_preprocessing.sequence
 
+# Serialization and file stream libraries
+import dill
+import string
+from os.path import exists
 
 class NLPModel:
     def __init__(self, comm_model=None, col_name='commands'):
@@ -153,7 +156,7 @@ command_data = 0  # Dataframe representing the commands and their type
 def init_inputs_to_comm_map():
     global inputs_to_commands
     temp = {}
-    with open('commands.json', 'r') as f:
+    with open('Commands.json', 'r') as f:
         temp = json.load(f)
         for objs in temp['commands']:
             for comm in objs["input"]:
@@ -166,11 +169,12 @@ def reshape_to_dataframe(mapping):
     command_data = command_data.reset_index()
     command_data['commands'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
 
-
+os.chdir('..')
+os.chdir('..')
 if not exists('dumps/optimized_model'):
     nn_classifier = None
 
-    with open('commands.json') as command_variants:
+    with open('Commands.JSON') as command_variants:
         training_data = json.load(command_variants)
 
     init_inputs_to_comm_map()
@@ -182,7 +186,7 @@ if not exists('dumps/optimized_model'):
             command_types.append(i['type'])
 
     reshape_to_dataframe({"commands": inputs, "type": command_types})
-    nn_classifier = NLPModel(CommandModel("commands.json"))
+    nn_classifier = NLPModel(CommandModel("Commands.JSON"))
     with open('dumps/optimized_model', 'wb') as outfile:
         dill.dump(nn_classifier, outfile)
         print("DUMPED NN MODEL")

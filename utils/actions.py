@@ -1,4 +1,3 @@
-import requests
 import pprint
 from configs import *
 

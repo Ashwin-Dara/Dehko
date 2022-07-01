@@ -76,7 +76,13 @@ foo@bar:~$ dehko open workflow ~1
 ## Directory Structure
 Here is a overview of the directory structure, highlighting the most important directories and the most relevant files. 
 
-[![](https://mermaid.ink/img/pako:eNo1j89qwzAMh1_F6DAcaGZY2w1y2Cl7gu7oixoriTv_CbZMGaXvPi9tLpJ-0scHusEQDUEHo4vXYcbE4rvXwZo32dP8ExvRtu2nsGYvVWHrciNeajpIZRKO_IxHqZaEk8dHfJcql3OiJTb_qv3m-JCZmG2Y8uslx7Aej9txKWdnhypa-0OUU13UspKHjbR-ylJZjxPlBnbgKXm0pj5x00EIDTyTJw1dHQ2NWBxr0OFe0bIYZPoylmOCbkSXaQdYOJ5-wwAdp0Ib1FucEvondf8Dmo5glQ)](https://mermaid.live/edit#pako:eNo1j89qwzAMh1_F6DAcaGZY2w1y2Cl7gu7oixoriTv_CbZMGaXvPi9tLpJ-0scHusEQDUEHo4vXYcbE4rvXwZo32dP8ExvRtu2nsGYvVWHrciNeajpIZRKO_IxHqZaEk8dHfJcql3OiJTb_qv3m-JCZmG2Y8uslx7Aej9txKWdnhypa-0OUU13UspKHjbR-ylJZjxPlBnbgKXm0pj5x00EIDTyTJw1dHQ2NWBxr0OFe0bIYZPoylmOCbkSXaQdYOJ5-wwAdp0Ib1FucEvondf8Dmo5glQ)
+```mermaid
+flowchart TD
+id2(Dehko) ---> id3(/utils) & id4(/drafts) & id5(/pragma) & id6(/subrepo)
+id3 ---> id7(settings.json)
+id5 ---> idpublic(/public) & idsrc(/src)
+id4 ---> idimgs(/images)
+```
 
 Folders
 - utils - contains all of the logic of Dehko, written in Python. Also contains the dependencies list in requirements.txt.
