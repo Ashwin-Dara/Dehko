@@ -1,4 +1,5 @@
 import os
+
 # Disabling logging warnings from Tensorflow to clean debugging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -20,6 +21,7 @@ import keras_preprocessing.sequence
 import dill
 import string
 from os.path import exists
+
 
 class NLPModel:
     def __init__(self, comm_model=None, col_name='commands'):
@@ -169,26 +171,29 @@ def reshape_to_dataframe(mapping):
     command_data = command_data.reset_index()
     command_data['commands'].apply(lambda x: re.sub(r'[^\w\s]', '', x))
 
-os.chdir('..')
-os.chdir('..')
-if not exists('dumps/optimized_model'):
-    nn_classifier = None
 
-    with open('Commands.JSON') as command_variants:
-        training_data = json.load(command_variants)
+def main(needs_training=False):
+    print("$$$ DEBUG: Models.py, Line 178. Printing CWD", os.getcwd())
+    if not exists('dumps/optimized_model') or needs_training:
+        nn_classifier = None
 
-    init_inputs_to_comm_map()
+        with open('Commands.JSON') as command_variants:
+            training_data = json.load(command_variants)
 
-    for i in training_data['commands']:
-        outputs[i['type']] = i['output']
-        for j in i['input']:
-            inputs.append(j)
-            command_types.append(i['type'])
+        init_inputs_to_comm_map()
 
-    reshape_to_dataframe({"commands": inputs, "type": command_types})
-    nn_classifier = NLPModel(CommandModel("Commands.JSON"))
-    with open('dumps/optimized_model', 'wb') as outfile:
-        dill.dump(nn_classifier, outfile)
-        print("DUMPED NN MODEL")
+        for i in training_data['commands']:
+            outputs[i['type']] = i['output']
+            for j in i['input']:
+                inputs.append(j)
+                command_types.append(i['type'])
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        reshape_to_dataframe({"commands": inputs, "type": command_types})
+        nn_classifier = NLPModel(CommandModel("Commands.JSON"))
+        with open('dumps/optimized_model', 'wb') as outfile:
+            dill.dump(nn_classifier, outfile)
+            print("Dumped optimized NN model in ./dumps.")
+
+
+if __name__ == '__main__':
+    main()

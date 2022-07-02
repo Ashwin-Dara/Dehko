@@ -50,23 +50,6 @@ class MessageParser:
         return self.type
 
     def is_command_ping(self):
-        """
-        >>> m = MessageParser("@dehko osidfjjiaosd")
-        >>> m.is_command_ping()
-        True
-        >>> m = MessageParser(" @dehko osidfjjiaosd")
-        >>> m.is_command_ping()
-        True
-        >>> m = MessageParser("     @dehko osidfjjiaosd")
-        >>> m.is_command_ping()
-        True
-        >>> m = MessageParser("   1  @dehko osidfjjiaosd")
-        >>> m.is_command_ping()
-        False
-        >>> m = MessageParser("@daehko osidfjjiaosd")
-        >>> m.is_command_ping()
-        False
-        """
         r = re.match(MessageParser.ping_pattern, self.contents)
         return bool(r)
 
