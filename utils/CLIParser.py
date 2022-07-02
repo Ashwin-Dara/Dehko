@@ -52,6 +52,7 @@ def main():
 
     # Checking if Dehko is given the --help or -h command.
     if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+        print(help_output)
         return
 
     # Checking if Dehko is given the --train command.
