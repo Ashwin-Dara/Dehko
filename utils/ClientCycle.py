@@ -169,7 +169,7 @@ class MsgClient:
     def process_message(self, text):
         parsed_msg = MessageParser(text, self.nlp_model, self.command_model)
         procedure = Procedure(parsed_msg.get_command_type(), parsed_msg.get_argument())
-        print(parsed_msg.print_data())
+        parsed_msg.print_data()
         print(procedure.to_string())
         add_procedure_request(procedure)
         empty_procedure_queue()

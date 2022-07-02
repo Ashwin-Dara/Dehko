@@ -54,11 +54,6 @@ class MessageParser:
         return bool(r)
 
     def print_data(self):
-        print("")
-        print("### MESSAGEPARSER METADATA: ")
-        print("Message Body: ", self.content_internal)
-        print("Argument[s] Recieved: ", self.argument)
-        print("######")
-        print("")
-
+        print("\n\n\033[4mMessage Parser Details\033[0m")
+        print(f"Description of Command: `{self.content_internal}`. Argument[s] Detected: `{self.argument}`")
 

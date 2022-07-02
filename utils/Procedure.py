@@ -19,4 +19,4 @@ class Procedure:
         command_to_func_mapping[self.procedure_name](self.procedure_args)
 
     def to_string(self):
-        return f'Procedure Name: `{self.procedure_name}`. Arguments: `{self.procedure_args}`'
+        return f"Task Completed! Executed the script associated with the procedure: {self.procedure_name}."
