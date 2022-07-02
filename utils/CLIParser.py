@@ -14,7 +14,6 @@ from CliOuputs import *
 # Importing libraries for progress bar/spinner.
 from progress.bar import ShadyBar
 from progress.spinner import Spinner
-import threading
 import time
 
 
@@ -42,9 +41,6 @@ def main():
     with open('dumps/optimized_model', 'rb') as infile:
         nn = dill.load(infile)
 
-    # Debugging print statement to see the contents of sys.argv
-    print("$$$ DEBUG: Contents of sys.argv: ", sys.argv)
-
     # Not enough arguments were passed for Dehko to run sufficiently.
     if len(sys.argv) <= 1:
         print(no_arguments_input)
@@ -68,22 +64,18 @@ def main():
                         help='Description of the command you wish to execute.')
 
     args, leftovers = parser.parse_known_args()
-    print("$$$ DEBUG: Parser.parse_known_args. Args component: ", args.command)
-    print(f"$$$ DEBUG: Leftsovers component: ", leftovers)
 
     if args.command is not None:
-        print(f"$$$ DEBUG: LINE 25. General description of command: {args.command} ")
-        # args = parser.parse_args()
-        # print("Recieved Text: ", args.text)
-
-        # Creating a Message Client Object. This is the object responsible for encompassing everything related to
-        # processing messages.
         print("Dehko 1.02")
+
+        # Code for the progress spinning bar.
         spinner = Spinner('Executing Scripts ')
         for i in range(0, 250):
             spinner.next()
             time.sleep(0.01)
         spinner.finish()
+
+        # Creating a Message Client Object. This object's responsible for parsing and classifying the messages.
         m = MsgClient(nn)
         m.process_message(args.command)
 

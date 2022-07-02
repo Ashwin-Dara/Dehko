@@ -22,4 +22,4 @@ Usages:
 	dehko -h: 
 		Concise usage of the --help command, which opens the informational panel. 
 
-To learn more about customization, contributions, and modifying Dehko, please visit our GitHub: https://github.com/Ashwin-Dara/Dehko.'''
+To learn more about customization, contributions, and modifying Dehko, please visit our GitHub: https://github.com/Ashwin-Dara/Dehko.\n'''

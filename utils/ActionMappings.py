@@ -1,3 +1,3 @@
 command_to_func_mapping = \
-    {"weather": (lambda x : print("Completed the weather action script!", x)),
+    {"weather": (lambda x: 0),
      "music": (lambda x: 0)}
