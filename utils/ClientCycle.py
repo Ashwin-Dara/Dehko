@@ -1,48 +1,10 @@
-from MessageParser import MessageParser # Importing the MessageParser class
-from ProcessQueue import * # Importing all functions from the file 'ProcessQueue.py'
-
-# Importing the relevant class for creating Procedure instances.
+# Importing relevant project libraries.
+from MessageParser import MessageParser
+from ProcessQueue import *
 from Procedure import Procedure
 
-# Here are some useful references to consider looking at when writing integration for Discord
-# - https://discordpy.readthedocs.io/en/stable/quickstart.html
-# - https://github.com/Rapptz/discord.py/blob/master/examples/guessing_game.py
-# - REPL- previous project on data mining
-
-"""
----------- RECEIVING
-
-1. Recieve a message from the users within the server.
-2. Check if the message is directed towards the bot.
-    - We will be able to do this via a special message structure.
-    - @bot_name message...
-3. If the message is directed towards the bot, we need to do some processing
-
----------- PROCESSING
-
-1. Remove the @bot_name from the message string
-2. If anything is enclosed around ~ https//:youtube.com... ~, it is a link. Store is as a corresponding "argument" pair
-    - remove the link from the message
-3. Classify the message.
-
------------ RESPONSE
-
-1. Perform the appropriate action. Send Follow up messages if needed.
-2. For the weather, think of a way to extract the city name out of the current text. May be difficult and need some autocorrelation.
-3. Use the NLPModel class and the CommandModel class
-
------------- ANALYZE
-1. Store the command that was called and the associated user
-2. Store key phrases (similar to the zkie bot project)
-
-"""
-
-# Created for testing purposes. Want to make sure that the Procedure.complete() function works as intended.
-def print_music_info(name):
-    print("LINE 44 was printed:  " + name)
 
 class QueueLoad:
-
     min_load = 0.1
     max_load = 3
 
@@ -83,12 +45,9 @@ class QueueLoad:
         self.num_entries += 1
 
 
-
-
 # We will create a queue for all of the requested processes. Moreover, we will maintain a load limit.
 # The implementation will be a Linked List essentially. There will be a pointer to the head and the tail.
 # This is for extremely fast insertions and deletions. They will be O(1).
-# Link for Process Handling: drive link with diagram pending......
 class ProcessQueue:
     def __init__(self):
         self.head = None
@@ -130,8 +89,9 @@ class ProcessQueue:
         if self.head is None:
             return "ProcessQueue is empty"
         else:
-            return "Head Process in Queue:  " +\
+            return "Head Process in Queue:  " + \
                    self.head.to_string()
+
 
 class MsgClient:
     def __init__(self, nn_model):
@@ -140,25 +100,15 @@ class MsgClient:
         self.nlp_model = nn_model
         self.command_model = self.nlp_model.get_command_model()
 
-    # # This function will run when the Discord bot is connected to the server and ready to go.
-    # async def on_ready(self):
-    #     print(f'Bot is ready. User name: {self.user}. ID: {self.user.id}')
-    #     print("##########")
-
-    # This function runs whenever
     def on_message(self, message):
-        # Checking if the author is the bot.
-        # If so, we don't want to respond to ourselves, so we just return.
         if message.author.id == self.user.id:
             return
 
         # Taking the contents of the message and creating an object of the "MessageParser"
         # It will parse through the message that we just send and tell us key information about
         # the arguments, type, and etc.
-
         parsed_msg = MessageParser(message.content, self.nlp_model, self.command_model)
         if parsed_msg.is_command_ping():
-
             # Create a procedure of the "type" that we parsed the message
             # Extract the relevant arguments and pass them into the procedure
             # Push the procedure object onto the "Process Queue."
@@ -166,6 +116,7 @@ class MsgClient:
             add_procedure_request(procedure)
             empty_procedure_queue()
 
+    # Mirror function of on_message without server support.
     def process_message(self, text):
         parsed_msg = MessageParser(text, self.nlp_model, self.command_model)
         procedure = Procedure(parsed_msg.get_command_type(), parsed_msg.get_argument())
@@ -173,5 +124,3 @@ class MsgClient:
         print(procedure.to_string())
         add_procedure_request(procedure)
         empty_procedure_queue()
-
-

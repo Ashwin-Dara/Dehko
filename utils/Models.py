@@ -7,15 +7,17 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import re
 import json
 
-# Relevant ML/NLP libraries
-import keras
-import sklearn
+# Relevant ML/NLP libraries.
 import nltk
-import matplotlib.pyplot as plt
+import keras
+import keras_preprocessing.sequence
 import tensorflow as tf
+import sklearn
+
+# Importing relevant math libraries.
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import keras_preprocessing.sequence
 
 # Serialization and file stream libraries
 import dill

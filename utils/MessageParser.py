@@ -1,13 +1,12 @@
+import re
+from Models import NLPModel
+
 # This class is responsible for taking the message as it is and breaking it
 # down into the core components.
 #
 # In particular, we want to send in a message to this class, and it should be able to
 # recover information about the (1) type of message (through NN classification) (2) arguments.
 # All of this will be primarily done through the use of regular expressions.
-import re
-from Models import NLPModel
-
-
 class MessageParser:
     ping_pattern = r'^\s*@dehko'
     arg_pattern = r'~.*'
@@ -26,22 +25,6 @@ class MessageParser:
 
         # Classifying the type of command it was from the message using the NN
         self.type = nn_model.classify_command(self.content_internal)
-        # self.contents = message
-
-
-        # Stopping the rest of the constructor from going if this was a ping to begin with
-        # if not self.is_command_ping():
-        #     return
-
-        # self.arg_matcher = re.compile(MessageParser.arg_pattern)
-        # r = self.arg_matcher.search(self.contents)
-        # if r:
-        #
-        # # Stores the internal message content (body) which we pass into the model for classification.
-        # self.content_internal = re.sub(self.contents, MessageParser.ping_pattern, "")
-        # self.content_internal = re.sub(self.content_internal, MessageParser.arg_pattern, "")
-        #
-        # self.type = nn_model.classify_command(self.content_internal, comm_model)
 
     def get_argument(self):
         return self.argument
@@ -54,6 +37,7 @@ class MessageParser:
         return bool(r)
 
     def print_data(self):
+        # Weird font is for bolding text within the terminal. 
         print("\n\n\033[4mMessage Parser Details\033[0m")
         print(f"Description of Command: `{self.content_internal}`. Argument[s] Detected: `{self.argument}`")
 
