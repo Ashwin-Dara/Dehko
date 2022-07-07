@@ -24,6 +24,8 @@ First clone this repository using the following command into your specified dire
 foobar@Foo:/home/$ git clone git@github.com:Ashwin-Dara/Dehko.git
 ```
 
+![image](images/code-snippets/1-Git-Clone-Snippet.png)
+
 Afterwards, cd into the directory "/Dehko/utils/venv/Scripts" through the following set of commands. 
 
 ```bash 
