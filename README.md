@@ -20,26 +20,24 @@ There are two forms of installations. The first option, which gives more persmis
 
 First clone this repository using the following command into your specified directory. 
 
-```bash 
+```console 
 foobar@Foo:/home/$ git clone git@github.com:Ashwin-Dara/Dehko.git
 ```
 
-![image](images/code-snippets/1-Git-Clone-Snippet.png)
-
 Afterwards, cd into the directory "/Dehko/utils/venv/Scripts" through the following set of commands. 
 
-```bash 
+```console
 foobar@Foo:/home/$ cd Dehko/utils/venv/Scripts 
 ```
 Before proceeding ensure that venv is installed on your system. For directions on how to install venv, please check this reference: https://pypi.org/project/virtualenv/. 
 
 After this, activate the virtual environment. For machines based on Windows, the command is `activate.bat`, which will execute the appropriate .bat script. For unix-based machines (all other machines), activate the virtual environment through the following command. 
-```bash 
+```console 
 foobar@Foo:/home/Dehko/utils/venv/Scripts$ source activate
 ```
 After this command you will notice a changed prefix in your current working directory displayed in the terminal. This means that the environment has been activated. For double measures, run the following command to ensure that all dependencies are successfully installed within your virtual environment. 
 
-```bash
+```console
 (/home/Dehko/utils/Scriptsfoobarutils.1env) foobar@Foo:/home/Dehko/utils/venv/Scripts$ pip3 install -r ../requirements.txt
 ```
 
@@ -49,11 +47,11 @@ After doing this, Dehko is ready to use! For potentially making this process mor
 
 First ensure that Docker is installed on your system. Afterwards, pull the Docker image for Dehko from Docker hub using the following command. 
 
-```bash
+```console
 foobar@Foo:/home/$ docker pull 3415266/dehko
 ```
 This will pull the Docker image of Dehko. Afterwards, build the image using the following command within the appropriate directory: 
-```bash 
+```console 
 foobar@Foo:/home/$ docker build -t 3415266/dehko .
 ```
 Dehko should be now ready to run! To ensure, run the container and Dehko's help flag using `docker run 3415266/dehko "--help"`. For the sake of speed and convenience, the first installation method is strongly preferred. 
