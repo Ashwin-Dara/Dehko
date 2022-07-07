@@ -160,7 +160,7 @@ command_data = 0  # Dataframe representing the commands and their type
 def init_inputs_to_comm_map():
     global inputs_to_commands
     temp = {}
-    with open('Commands.json', 'r') as f:
+    with open('settings.JSON', 'r') as f:
         temp = json.load(f)
         for objs in temp['commands']:
             for comm in objs["input"]:
@@ -179,7 +179,7 @@ def main(needs_training=False):
     if not exists('dumps/optimized_model') or needs_training:
         nn_classifier = None
 
-        with open('Commands.JSON') as command_variants:
+        with open('settings.JSON') as command_variants:
             training_data = json.load(command_variants)
 
         init_inputs_to_comm_map()
@@ -191,7 +191,7 @@ def main(needs_training=False):
                 command_types.append(i['type'])
 
         reshape_to_dataframe({"commands": inputs, "type": command_types})
-        nn_classifier = NLPModel(CommandModel("Commands.JSON"))
+        nn_classifier = NLPModel(CommandModel("settings.JSON"))
         with open('dumps/optimized_model', 'wb') as outfile:
             dill.dump(nn_classifier, outfile)
             print("Dumped optimized NN model in ./dumps.")

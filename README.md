@@ -9,26 +9,57 @@ Dehko is a multi-OS NLP smart assistant tool built to easily automate non-develo
 
 Dehko allows you to define custom sequences by defining a command and associated keyphrases that correspond to that command. Moreover, there’s no need to worry about remembering these keyphrases. Dehko uses NLP to parse, evaluate, and classify your input, ensuring that the process of converting natural, human language into understandable instructions is highly accurate. 
 
-Dehko is highly customizable yet simple to use. All modifications are handled by simply editing a single JSON configuration file, and constant streams of open source analytic tools are available to users to view. Here’s a video that better illustrates what Dehko does and how it works. 
+Dehko is highly customizable yet simple to use. All modifications are handled by simply editing a single JSON configuration file, and relevant metadeta will be displayed everytime any scripts are run to help provide clarity in what's happening under the hood. 
 
 
 ## Installation
 
-Clone this repository within the directory of your choice. After cloning the repository, install the following either manually or through `requirements.txt` which is located under `Dehko/utils`. 
+There are two forms of installations. The first option, which gives more persmissions to Dehko to make modifications to your computer (), would be using virtual environments. The second is through downloading the containerized version of Dehko by pulling the Docker image from Docker hub. The tradeoff between these two is that the first option allows for scripts that potentially involve opening applications on your host computer. Moreover, the first method is significantly less resource intensive on your computer. 
 
-- Docker 
-- Tensorflow 2.0. `$ pip install tensorflow`
-- Pandas. `$ pip install pandas` 
-- NLTK. `$ pip install ntlk`
-- Matplotlib, Jupyter, Pandas, SciPy, NumPy. `$ python3 -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose`
+### Installation via "venv"
 
-To ensure that Dehko was installed correctly, type the command `docker run dehko --version` to check whether or not Dehko installed correctly. Currently, Dehko is on version 1.02. All that’s remaining before you get Dekho up and running for your usage is to modify the JSON configuration file and then type in the command `dehko train`. More details about modifying Dekho to fit your needs are located in the customization section.
+First clone this repository using the following command into your specified directory. 
 
+```bash 
+foobar@Foo:/home/$ git clone git@github.com:Ashwin-Dara/Dehko.git
+```
 
-## Customization 
+Afterwards, cd into the directory "/Dehko/utils/venv/Scripts" through the following set of commands. 
+
+```bash 
+foobar@Foo:/home/$ cd Dehko/utils/venv/Scripts 
+```
+Before proceeding ensure that venv is installed on your system. For directions on how to install venv, please check this reference: https://pypi.org/project/virtualenv/. 
+
+After this, activate the virtual environment. For machines based on Windows, the command is `activate.bat`, which will execute the appropriate .bat script. For unix-based machines (all other machines), activate the virtual environment through the following command. 
+```bash 
+foobar@Foo:/home/Dehko/utils/venv/Scripts$ source activate
+```
+After this command you will notice a changed prefix in your current working directory displayed in the terminal. This means that the environment has been activated. For double measures, run the following command to ensure that all dependencies are successfully installed within your virtual environment. 
+
+```bash
+(/home/Dehko/utils/Scriptsfoobarutils.1env) foobar@Foo:/home/Dehko/utils/venv/Scripts$ pip3 install -r ../requirements.txt
+```
+
+After doing this, Dehko is ready to use! For potentially making this process more streamlined, consider a single bash script with an activation command of your choice. 
+
+### Installation via Docker Hub
+
+First ensure that Docker is installed on your system. Afterwards, pull the Docker image for Dehko from Docker hub using the following command. 
+
+```bash
+foobar@Foo:/home/$ docker pull 3415266/dehko
+```
+This will pull the Docker image of Dehko. Afterwards, build the image using the following command within the appropriate directory: 
+```bash 
+foobar@Foo:/home/$ docker build -t 3415266/dehko .
+```
+Dehko should be now ready to run! To ensure, run the container and Dehko's help flag using `docker run 3415266/dehko "--help"`. For the sake of speed and convenience, the first installation method is strongly preferred. 
+
+## Customization and Usage
 To customize Dehko – such as defining a custom command and associated phrases – there are two steps to it. 
 
-The first step would be to modify the primary JSON configuration file. This is located under the the directory `Dehko/utils` would be to modify a JSON file “config.json.” The purpose of this step is to inform Dehko what new commands are being added and the associated phrases for that command. Currently, Dehko comes with 3 default commands. Copy the layout of one of these and modify the fields appropriately. 
+The first step would be to modify the primary JSON configuration file. This is located under the the directory `Dehko/utils` would be to modify a JSON file "settings.json.” The purpose of this step is to inform Dehko what new commands are being added and the associated phrases for that command. Currently, Dehko comes with 3 default commands. Copy the layout of one of these and modify the fields appropriately. 
 
 The second step is to actually define the sequence for Dehko to execute once the command is matched. Dehko is primarily built on Python, which allows for powerful scripting capabilities. To define a new script associated with the entry just added within the JSON file, it’s recommended to create a new Python file with the code that should be executed for that command. Then within the file, “commands to mapping” dictionary, add the function that you define within the dictionary.
 
@@ -62,15 +93,38 @@ def web-workflow(workflow_number):
 After making any modifications to Dehko, it needs to be retrained. To re-optimize Dehko and run the command just created, we would use the following code: 
 ```console
 
-foo@bar:~$ dehko train
->
-> Dehko is Cleaning and Re-Optimizing!
-> Progress: [30%] [##########---------------------------]
->
-> Dehko is now ready!
->
-foo@bar:~$ dehko open workflow ~1
-> Task Complete.
+foo@bar:~$python3 ../../CLIParser.py train
+Dehko (1.02)
+
+Retraining Dehko to reflect updates made in settings.json & enhance classification accuracy!
+
+Optimizing Neural Network: |████████████████████████████████| 50/50
+
+Epoch 1/350
+1/1 [==============================] - 4s 4s/step - loss: 3.2184 - accuracy: 0.0400
+Epoch 2/350
+1/1 [==============================] - 0s 14ms/step - loss: 3.2176 - accuracy: 0.0400
+Epoch 3/350
+1/1 [==============================] - 0s 10ms/step - loss: 3.2168 - accuracy: 0.0400
+...
+...
+...
+Epoch 348/350
+1/1 [==============================] - 0s 12ms/step - loss: 0.3920 - accuracy: 1.0000
+Epoch 349/350
+1/1 [==============================] - 0s 11ms/step - loss: 0.3893 - accuracy: 1.0000
+Epoch 350/350
+1/1 [==============================] - 0s 12ms/step - loss: 0.3867 - accuracy: 1.0000
+
+foo@bar:~$ python3 ../../CLIParser.py "open web workflow ~1"
+Dehko 1.02
+Executing Scripts |
+1/1 [==============================] - 1s 522ms/step
+
+
+Message Parser Details
+Description of Command: `open web workflow ~1`. Argument[s] Detected: `1`
+Task Completed! Executed the script associated with the procedure: web-workflow.
 ```
 
 ## Directory Structure
@@ -96,4 +150,9 @@ Files
 -----
 
 ### Resources
-- 
+- https://www.tensorflow.org/guide/keras/rnn
+- https://www.nltk.org/api/nltk.tokenize.html
+- https://www.techtarget.com/searchitoperations/definition/Docker-image
+- https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+- https://docs.python.org/3/tutorial/venv.html
+- https://readthedocs.org/projects/argparse/
