@@ -1,6 +1,3 @@
-[submodule "ytmusicapi"]
-	path = ytmusicapi
-	url = https://github.com/sigma67/ytmusicapi
 [submodule "Dehko-App"]
 	path = Dehko-App
 	url = https://github.com/Ashwin-Dara/Dehko-App

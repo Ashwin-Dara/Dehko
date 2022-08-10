@@ -1,8 +1,0 @@
-- purple and dark theme 
-- use the same colorscheme as discord / convex backend 
-- prototype really quickly on FIGMA. Don't worry about the design too much you just want to find the design that will give you the possible layout in terms of WORKFLOW
-
------------------------
-
-Approximate time (~7 hours) 
-

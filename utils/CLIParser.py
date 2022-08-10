@@ -17,6 +17,7 @@ from progress.spinner import Spinner
 import time
 
 
+# Displays animation for the progress bar.
 # The lower the parameter speed is, the fast that the progress bar animation updates.
 def progress_bar_animation(speed):
     bar = ShadyBar("Optimizing Neural Network:", max=speed)
@@ -65,6 +66,7 @@ def main():
 
     args, leftovers = parser.parse_known_args()
 
+    # If the input entered into the terminal was viable to be parsed.
     if args.command is not None:
         print("Dehko 1.02")
 

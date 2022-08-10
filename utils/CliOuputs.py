@@ -1,3 +1,6 @@
+# To enable multi-line formatting and avoid clutter, relevant statements and information 
+# about the CLI (such as the help message and the training status) were grouped into this file. 
+
 no_arguments_input = '''Dehko (1.02)
 
 There were not enough arguments for Dehko to understand! Please type in a description of the script you wish to run. 

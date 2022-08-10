@@ -3,24 +3,19 @@
           {
             "type":"music",
             "input":["music","play music", "could you play music", "play something", "play a song", "could you play a song"],
-            "output":["What's the name/url of the song? Ping me in your message so I know you are talking to me.", "Of course! Ping me with the name/url.",
-                      "Sure. In your next message, ping me with the name/url of the song."]
+            "output":["Define the name/url of the song following the argument structure.",
+                      "Ping the name/url of the song enclosed with ~ to denote an argument."]
           },
           {
             "type":"weather",
-            "input": ["how is the weather", "will it rain", "it is hot today", "it is cold outside", "should i bring a jacket", "what is the weather",
+            "input": ["how is the weather", "it is hot", "it is cold", "what is the weather",
                       "what is the temperature outside", "what is the temp", "what is the temp outside", "what is the weather outside", "weather"],
-            "output": ["Here is an overview of the weather in San Franciso. Specify another city in your message if you want to see that city's forecast."]
+            "output": ["Here is a 7 day forecast of the weather. To define another city, enclose the city name with the ~ to denote an argument. "]
           },
           {
-            "type": "radio",
-            "input": ["turn on the radio", "recommend a playlist", "radio"],
-            "output": ["Ping me with the genre!", "Let genre are you feeling", "What type of music do you want to play?"]
-          },
-          {
-            "type": "reminder",
-            "input": ["remind me something", "remind me to message", "remind me to", "remind me", "reminder"],
-            "output": ["Will ping you when it's time!"]
+            "type": "web-workflow",
+            "input": ["open my workflow", "start running the tabs", "open browser", "run chrome"],
+            "output": ["Successfully opened web-workflow and all tabs."]
           }
         ]
 }

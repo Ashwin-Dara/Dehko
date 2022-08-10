@@ -156,3 +156,6 @@ Files
 - https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
 - https://docs.python.org/3/tutorial/venv.html
 - https://readthedocs.org/projects/argparse/
+- https://towardsai.net/p/deep-learning/text-classification-with-rnn
+- https://www.gurobi.com/documentation/9.5/remoteservices/queuing_and_load_balancing.html
+- https://docs.python.org/3/library/re.html
